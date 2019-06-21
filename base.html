@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Просмотр успеваемости</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>		
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper" class="divided">
+
+				<!-- One -->
+					<section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
+						<div class="content">
+							<h1>Просмотр оценок</h1>
+							<p class="major">Информация</p>
+							<ul class="actions stacked">
+								<li><a href="javascript:showtable();" class="button primary big wide smooth-scroll-middle">Начать просмотр</a></li>
+							</ul>
+						</div>						
+						<div class="content">
+							<h2>Выберите файл</h2>
+							
+							<form method="POST" id="form" action="/up" enctype="multipart/form-data">
+								<ul class="alt">
+									<div id="filelist"></div>	
+									<li>
+										<label for="file-upload" class="button icon fa-upload">
+										    Нажмите, чтобы добавить
+										</label>
+										<input id="file-upload" name="file_upload" type="file"/>
+									</li>
+								</ul>
+							</form>
+						</div>
+					</section>
+
+				<!-- Table -->
+					<section class="wrapper style1 align-center">
+						
+						<div class="inner">
+							<header>
+								<h2 id="htable">Успеваемость</h2>
+							</header>							
+							<div class="table-wrapper">
+								<span id="tablehelp">Для отображения необходимо выбрать файл</span>
+								<table class="alt" id="tableviewer">
+								</table>
+							</div>
+						</div>
+					</section>
+				
+				<!-- Footer -->
+					<footer class="wrapper style1 align-center">
+						<div class="inner">							
+							<p>&copy; Anton Aksenov. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script src="assets/js/base.js"></script>
+
+	</body>
+</html>

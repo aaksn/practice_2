@@ -2087,10 +2087,19 @@ input, select, textarea {
 	}
 
 /* Button */
+	input[type="file"] {
+    	display: none;
+	}
+	.custom-file-upload {
+	    border: 1px solid #ccc;
+	    display: inline-block;
+	    padding: 6px 12px;
+	    cursor: pointer;
+	}
 
 	input[type="submit"],
 	input[type="reset"],
-	input[type="button"],
+	input[type="button"],	
 	button,
 	.button {
 		-moz-appearance: none;
@@ -2116,8 +2125,7 @@ input, select, textarea {
 		line-height: 3.75em;
 		border-radius: 3.75em;
 		padding: 0 2.5em;
-		text-overflow: ellipsis;
-		overflow: hidden;
+		text-overflow: ellipsis;		
 	}
 
 		input[type="submit"].icon:before,
@@ -2907,7 +2915,7 @@ input, select, textarea {
 
 	.table-wrapper {
 		-webkit-overflow-scrolling: touch;
-		margin: 0 0 2rem 0;
+		margin: 0 0 2rem 0;				
 		overflow-x: auto;
 	}
 
@@ -2934,11 +2942,13 @@ input, select, textarea {
 			font-size: 0.9rem;
 			font-weight: 400;
 			padding: 0 0.75rem 0.75rem 0.75rem;
-			text-align: left;
+			text-align: center;
 		}
 
 		table thead {
 			border-bottom: solid 2px;
+
+			text-align: center;
 		}
 
 		table tfoot {
@@ -2963,7 +2973,7 @@ input, select, textarea {
 				border-top-width: 1px;
 			}
 
-			table.alt thead {
+			table.alt thead {				
 				border-bottom: 0;
 			}
 
