@@ -1,10 +1,8 @@
 
-/*
-$('#file-upload').change(function() {
-        let files = this.files;
-        sendFiles(files);
-});*/
-
+$(document).ready(
+    function() {
+        $('#actions').hide();
+    });
 
 function sendFiles(files) {
     console.log('Send');
@@ -79,6 +77,7 @@ function deletefile(source) {
 }
 
 function showtable() {
+    $('#actions').show();    
 	$('#tablehelp').empty();
 	$('#tableviewer').empty();
 	$('#tablehelp').text('Подгружаем таблицу...');

@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>Просмотр успеваемости</title>
+		<title>Просмотр посещаемости</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -16,39 +16,56 @@
 				<!-- One -->
 					<section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
 						<div class="content">
-							<h1>Просмотр оценок</h1>
-							<p class="major">Информация</p>
-							<ul class="actions">
+							<h1>Просмотр посещаемости</h1>
+							<p class="major">Выберите группу из списка и нажмите &quot;Начать просмотр&quot;. Для доступа к редактированию нажмите &quot;Войти&quot;</p>
+							<ul class="actions fit">
 								<li><a href="javascript:showtable();" class="button primary big wide smooth-scroll-middle">Начать просмотр</a></li>
 								<li><a href="./login.html" class="button primary big wide smooth-scroll-middle">Войти</a></li>
 							</ul>
 						</div>						
 						<div class="content">
-							<h2>Выберите файл</h2>
+							<h2>Выберите группу</h2>
 							
 							<form method="POST" id="form" action="/up" enctype="multipart/form-data">
 								<ul class="alt">
-									<div id="filelist"></div>	
+									<div id="filelist"></div>
 									<li>
-										<label for="file-upload" class="button icon fa-upload">
-										    Нажмите, чтобы добавить
-										</label>
-										<input id="file-upload" name="file_upload" type="file"/>
+										<a href="javascript:showtable();" class="button icon fa-plus">Добавить</a>
 									</li>
 								</ul>
 							</form>
 						</div>
 					</section>
 
+				<!-- Actions -->
+
+					<section class="wrapper style1 align-center color1 invert" id="actions">
+						<div class="inner">
+							<ul class="actions fit" style="margin-bottom: 0px;">
+								<li>
+									<label for="file-upload" class="button icon fa-upload">
+									    Импорт из EXCEL
+									</label>
+								</li>
+								<input id="file-upload" name="file_upload" type="file"/>
+								<li><a href="./login.html" class="button icon fa-download">Скачать EXCEL</a></li>
+								<li><a href="./login.html" class="button icon fa-download">Скачать PDF</a></li>
+							</ul>
+						</div>
+						
+					</section>
+					
+				
+
 				<!-- Table -->
 					<section class="wrapper style1 align-center">
 						
 						<div class="inner">
 							<header>
-								<h2 id="htable">Успеваемость</h2>
+								<h2 id="htable">Посещаемость</h2>
 							</header>							
 							<div class="table-wrapper">
-								<span id="tablehelp">Для отображения необходимо выбрать файл</span>
+								<span id="tablehelp">Для отображения необходимо выбрать группу</span>
 								<table class="alt" id="tableviewer">
 								</table>
 							</div>
@@ -58,7 +75,7 @@
 				<!-- Footer -->
 					<footer class="wrapper style1 align-center">
 						<div class="inner">							
-							<p>&copy; Anton Aksenov. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+							<p>&copy; Антон Аксенов, Руслан Погорелов. 2019.</p>
 						</div>
 					</footer>
 
