@@ -29,7 +29,7 @@
 							<form method="POST" id="form" action="/up" enctype="multipart/form-data">
 								<ul class="alt">
 									<div id="filelist"></div>
-									<!-- -->
+									<!-- Пример списка групп -->
 									1 курс
 									<li id="1f">
 										<input type="radio" id="1" name="fileselector" />
@@ -53,7 +53,18 @@
 										<a href="javascript:deletefile('#2');" class="button primary small icon fa-trash">Удалить</a>
 									</li>
 									<li>
-										<a href="javascript:showtable();" class="button icon fa-plus">Добавить</a>
+										<ul class="actions fit">
+											<li><div class="field">
+												<select name="department" id="department">
+													<option value="">- Выберите курс -</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+												</select>
+											</div></li>
+											<li><a href="javascript:showtable();" class="button icon fa-plus">Добавить</a></li>
+										</ul>
 									</li>
 								</ul>
 							</form>
@@ -90,6 +101,39 @@
 							<div class="table-wrapper">
 								<span id="tablehelp">Для отображения необходимо выбрать группу</span>
 								<table class="alt" id="tableviewer">
+									<thead>		
+										<tr>
+											<th>Имя</th>
+											<th>01.01</th>
+											<th>02.02</th>
+											<th>04.12</th>
+											<th>05.12</th>
+											<th><a href="" class="icon fa-plus"></a></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Name1</td>
+											<td><a href="" class="icon fa-times"></a></td>
+											<td><a href="" class="icon fa-check"></a></td>
+											<td><a href="" class="icon fa-check"></a></td>
+											<td><a href="" class="icon fa-check"></a></td>
+											<td></td>	
+										</tr>
+										<tr>
+											<td>Name2</td>
+											<td><a href="" class="icon fa-times"></a></td>
+											<td><a href="" class="icon fa-check"></a></td>
+											<td><a href="" class="icon fa-check"></a></td>
+											<td><a href="" class="icon fa-check"></a></td>
+											<td></td>	
+										</tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<td><a href="" class="icon fa-plus"> Добавить студента</a></td>
+										</tr>
+									</tfoot>
 								</table>
 							</div>
 						</div>
