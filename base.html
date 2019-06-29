@@ -25,46 +25,32 @@
 						</div>						
 						<div class="content">
 							<h2>Выберите группу</h2>
-							
 							<form method="POST" id="form" action="/up" enctype="multipart/form-data">
-								<ul class="alt">
-									<div id="filelist"></div>
+								<ul class="alt">									
 									<!-- Пример списка групп -->
-									1 курс
+									<h2><select name="courseselector" id="courseselector" class="select alt">	
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">1 маг.</option>
+										<option value="6">2 маг.</option>
+									</select> курс</h2>
+									<div id="courses"></div>
 									<li id="1f">
-										<input type="radio" id="1" name="fileselector" />
+										<input type="radio" id="1" name="groupselector" />
 										<label for="1">1 группа</label>
-										<a href="javascript:deletefile('#1');" class="button primary small icon fa-trash">Удалить</a>
+										<a href="javascript:editpos('1');" class="button primary small icon fa-pencil-square-o">Изменить</a>
+										<a href="javascript:deletepos('1');" class="button primary small icon fa-trash">Удалить</a>
 									</li>
 									<li id="2f">
-										<input type="radio" id="2" name="fileselector" />
+										<input type="radio" id="2" name="groupselector" />
 										<label for="2">2 группа</label>
-										<a href="javascript:deletefile('#2');" class="button primary small icon fa-trash">Удалить</a>
+										<a href="javascript:deletepos('2');" class="button primary small icon fa-trash">Удалить</a>
 									</li>
-									2 курс
-									<li id="1f">
-										<input type="radio" id="1" name="fileselector" />
-										<label for="1">1 группа</label>
-										<a href="javascript:deletefile('#1');" class="button primary small icon fa-trash">Удалить</a>
-									</li>
-									<li id="2f">
-										<input type="radio" id="2" name="fileselector" />
-										<label for="2">2 группа</label>
-										<a href="javascript:deletefile('#2');" class="button primary small icon fa-trash">Удалить</a>
-									</li>
+									
 									<li>
-										<ul class="actions fit">
-											<li><div class="field">
-												<select name="department" id="department">
-													<option value="">- Выберите курс -</option>
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-												</select>
-											</div></li>
-											<li><a href="javascript:showtable();" class="button icon fa-plus">Добавить</a></li>
-										</ul>
+										<a href="javascript:addpos();" class="button icon fa-plus">Добавить</a>
 									</li>
 								</ul>
 							</form>
@@ -149,6 +135,8 @@
 			</div>
 
 		<!-- Scripts -->
+
+
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.scrollex.min.js"></script>
 			<script src="assets/js/jquery.scrolly.min.js"></script>
@@ -156,7 +144,94 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-			<script src="assets/js/base.js"></script>
+			<!--<script src="assets/js/base.js"></script>-->
+			<script type="text/javascript">
+				$(document).ready(
+				    function() {
+				        $('#actions').hide();
+				    });
+
+				document.getElementById("courseselector").onchange = function changecourse()
+				{
+					var e = $("#courseselector :selected").val();
+					$.get('/filelist.php', {
+				        id: e
+				    }).done(function(response) {
+				    	
+				        $('#courses').html(response)
+				    }).fail(function() {
+				        $('#courses').text('Unable to show')
+				    });					
+				}
+
+				function deletepos(source) {            
+				    $.post('/filelist.php', {
+				    	type: 'DEL',                
+				        id: source,
+				        idtable: $("#courseselector :selected").val() 
+				    }).done(function(response) {
+				        $(response).detach()
+				    }).fail(function() {
+				        alert('No connection ')
+				    });
+				    $('#courses').html('<b>Source</b> '+source+' idtable' + $("#courseselector :selected").val());
+
+			    	$('#'+source+'f').detach();
+				}
+
+				function addpos(source) {            
+				    $.post('/filelist.php', {
+				    	type: 'ADD',
+				        idtable: $("#courseselector :selected").val() 
+				    }).done(function(response) {
+				        $('#courses').append('<li id="'+response+'f"><input type="radio" id="'+response+'" name="groupselector" /><label for="'+response+'">'+response+' группа</label><a href="javascript:editpos('+response+');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos('+response+');" class="button primary small icon fa-trash">Удалить</a></li>');
+				    }).fail(function() {
+				        alert('No connection ')
+				    });
+				}
+
+				function editpos(source) {
+					
+					if ($("#"+source+"f").children().is('.fa-check-square-o')) {
+						$("#"+source+"f").children(".fa-check-square-o").text('Изменить').removeClass('fa-check-square-o').addClass('fa-pencil-square-o');
+						$("label[for='"+source+"']").html('n курс');
+					} else {
+						var w = $("label[for='"+source+"']").css('width');
+						var t = $("label[for='"+source+"']").text();						
+						$("label[for='"+source+"']").html('<input type="text" name="newval" id="newval" value="" style="height: 2rem">').css('width', 2*w);
+						$("#newval").val(t);
+						$("#"+source+"f").children(".fa-pencil-square-o").text('OK').removeClass('fa-pencil-square-o').addClass('fa-check-square-o');
+					};			    
+				}
+
+				function endedit(source) {            
+				    $.post('/filelist.php', {
+				    	type: 'ADD',
+				        idtable: $("#courseselector :selected").val() 
+				    }).done(function(response) {
+				        $('#courses').append('<li id="'+response+'f"><input type="radio" id="'+response+'" name="groupselector" /><label for="'+response+'">'+response+' группа</label><a href="javascript:deletepos('+response+');" class="button primary small icon fa-trash">Удалить</a></li>');
+				    }).fail(function() {
+				        //alert('No connection ')
+				    });				    
+				}
+
+				function showtable() {
+				    $('#actions').show();    
+					$('#tablehelp').empty();
+					$('#tableviewer').empty();
+					$('#tablehelp').text('Подгружаем таблицу...');
+					location.href = '#htable';            
+				    $.get('/showtable', {
+				        idtable: $("#courseselector :selected").val(),
+				        id: $("input[name='groupselector']:checked").attr("id")
+				    }).done(function(response) {
+				    	$('#tablehelp').empty();
+				        $('#tableviewer').html(response)
+				    }).fail(function() {
+				        $('#tablehelp').text('Unable to show')
+				    });            
+				}
+			</script>
 
 	</body>
 </html>
