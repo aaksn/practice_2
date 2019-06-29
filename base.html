@@ -188,6 +188,7 @@
 				    }).fail(function() {
 				        alert('No connection ')
 				    });
+				    $('#courses').append('<li id="'+response+'f"><input type="radio" id="'+response+'" name="groupselector" /><label for="'+response+'">'+response+' группа</label><a href="javascript:editpos('+response+');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos('+response+');" class="button primary small icon fa-trash">Удалить</a></li>');
 				}
 
 				function editpos(source) {
