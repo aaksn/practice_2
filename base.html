@@ -26,8 +26,7 @@
 						<div class="content">
 							<h2>Выберите группу</h2>
 							<form method="POST" id="form" action="/up" enctype="multipart/form-data">
-								<ul class="alt">									
-									<!-- Пример списка групп -->
+								<ul class="alt">
 									<h2><select name="courseselector" id="courseselector" class="select alt">	
 										<option value="1">1</option>
 										<option value="2">2</option>
@@ -37,18 +36,6 @@
 										<option value="6">2 маг.</option>
 									</select> курс</h2>
 									<div id="courses"></div>
-									<li id="1f">
-										<input type="radio" id="1" name="groupselector" />
-										<label for="1">1 группа</label>
-										<a href="javascript:editpos('1');" class="button primary small icon fa-pencil-square-o">Изменить</a>
-										<a href="javascript:deletepos('1');" class="button primary small icon fa-trash">Удалить</a>
-									</li>
-									<li id="2f">
-										<input type="radio" id="2" name="groupselector" />
-										<label for="2">2 группа</label>
-										<a href="javascript:deletepos('2');" class="button primary small icon fa-trash">Удалить</a>
-									</li>
-									
 									<li>
 										<a href="javascript:addpos();" class="button icon fa-plus">Добавить</a>
 									</li>
@@ -66,8 +53,8 @@
 									<label for="file-upload" class="button icon fa-upload">
 									    Импорт из EXCEL
 									</label>
-								</li>
-								<input id="file-upload" name="file_upload" type="file"/>
+									<input id="file-upload" name="file_upload" type="file"/>
+								</li>								
 								<li><a href="./login.html" class="button icon fa-download">Скачать EXCEL</a></li>
 								<li><a href="./login.html" class="button icon fa-download">Скачать PDF</a></li>
 							</ul>
@@ -87,20 +74,20 @@
 							<div class="table-wrapper">
 								<span id="tablehelp">Для отображения необходимо выбрать группу</span>								
 								<table class="alt" id="tableviewer">
-									<thead>		
+									<!--<thead>		
 										<tr>
 											<th>Имя</th>
 											<th><a id="d1" href="javascript:changedate('d1')">01.01</a></th>
 											<th>02.02</th>
 											<th>04.12</th>
 											<th>05.12</th>
-											<th><a href="javascript:adddate();" class="icon fa-plus"></a></th>
+											<th><a href="javascript:adddate()" class="icon fa-plus"></a></th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
 											<td><a id="n1" href="javascript:changename('n1')">Name1</a></td>
-											<td><a id="m1" href="javascript:change('m1');" class="icon fa-times"></a></td>
+											<td><a id="m1" href="javascript:change('m1')" class="icon fa-times"></a></td>
 											<td><a href="" class="icon fa-check"></a></td>
 											<td><a href="" class="icon fa-check"></a></td>
 											<td><a href="" class="icon fa-check"></a></td>
@@ -115,9 +102,9 @@
 									</tbody>
 									<tfoot>
 										<tr>
-											<td><a href="javascript:addstudent();" class="icon fa-plus"> Добавить студента</a></td>
+											<td><a href="javascript:addstudent()" class="icon fa-plus"> Добавить студента</a></td>
 										</tr>
-									</tfoot>
+									</tfoot>-->
 								</table>
 							</div>
 						</div>
@@ -219,25 +206,31 @@
 
 				function adddate() {
 					$("#tableviewer thead th:last").detach();
-					$("#tableviewer thead tr").append('<th>head</th><th><a href="javascript:adddate();" class="icon fa-plus"></a></th>"');
-					$("#tableviewer tbody tr").append('<td><a href="" class="icon fa-times"></a></td>');
+					var response = 99;
+					$("#tableviewer thead tr").append('<th><a id="d'+response+'" href="javascript:changedate('+"'d"+response+"'"+')">01.01</a></th><th><a href="javascript:adddate()" class="icon fa-plus"></a></th>"');
+					//Получить id строки
+					var rownum = 98;
+					$("#tableviewer tbody tr").append('<td><a id="m'+rownum+'_'+response+'" href="javascript:change('+"'m"+rownum+'_'+response+')" class="icon fa-times"></a></td>');
 					
 					$.post('./table.php', {
 				    	type: 'ADDDATE',
 				        idtable: $("#courseselector :selected").val() 
 				    }).done(function(response) {
-				        alert(response);
+				    	//response должен вернут id даты
+				        //alert(response);
 				    }).fail(function() {
 				        alert('No connection ')
 				    });
 				}
 
 				function addstudent() {
+					var response = 99;
+					var rownum = 98;
 					$("#tableviewer tbody").append('<tr></tr>');
-					$("#tableviewer tbody tr:last").append('<td>Name2</td>');
+					$("#tableviewer tbody tr:last").append('<td><a id="n'+response+'" href="javascript:changename('+"'n"+response+"'"+')">ФИО</a></td>');
 					if ($("#tableviewer tbody tr").length > 1) {
 						for (var i = $("#tableviewer tbody tr:first td").length - 2; i >= 0; i--) {
-							$("#tableviewer tbody tr:last").append('<td><a href="" class="icon fa-times"></a></td>');
+							$("#tableviewer tbody tr:last").append('<td><a id="m'+rownum+'_'+response+'" href="javascript:change('+"'m"+rownum+'_'+response+')" class="icon fa-times"></a></td>');
 						}
 					}					
 					
@@ -245,7 +238,7 @@
 				    	type: 'ADDSTUDENT',
 				        idtable: $("#courseselector :selected").val() 
 				    }).done(function(response) {
-				        alert(response);
+				        //alert(response);
 				    }).fail(function() {
 				        alert('No connection ')
 				    });
