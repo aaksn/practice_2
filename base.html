@@ -147,12 +147,21 @@
 				$(document).ready(
 				    function() {
 				        $('#actions').hide();
+
+				        var e = $("#courseselector :selected").val();
+						$.get('./filelist.php', {
+					        id: e
+					    }).done(function(response) {
+					        $('#courses').html(response)
+					    }).fail(function() {
+					        $('#courses').text('Не удалось подключиться к серверу')
+					    });
 				    });
 
 				document.getElementById("courseselector").onchange = function changecourse()
 				{
 					var e = $("#courseselector :selected").val();
-					$.get('/filelist.php', {
+					$.get('./filelist.php', {
 				        id: e
 				    }).done(function(response) {
 				    	
@@ -163,7 +172,7 @@
 				}
 
 				function deletepos(source) {            
-				    $.post('/filelist.php', {
+				    $.post('./filelist.php', {
 				    	type: 'DEL',                
 				        id: source,
 				        idtable: $("#courseselector :selected").val() 
@@ -175,7 +184,7 @@
 				}
 
 				function addpos(source) {            
-				    $.post('/filelist.php', {
+				    $.post('./filelist.php', {
 				    	type: 'ADD',
 				        idtable: $("#courseselector :selected").val() 
 				    }).done(function(response) {
@@ -183,16 +192,15 @@
 				    }).fail(function() {
 				        alert('No connection ')
 				    });
-				    var response = '3';
-				    $('#courses').append('<li id="'+response+'f"><input type="radio" id="'+response+'" name="groupselector" /><label for="'+response+'">'+response+' группа</label><a href="javascript:editpos('+response+');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos('+response+');" class="button primary small icon fa-trash">Удалить</a></li>');
 				}
 
 				function editpos(source) {
 					if ($("#"+source+"f").children().is('.fa-check-square-o')) {
-						$.post('/filelist.php', {
+						$.post('./filelist.php', {
 					    	type: 'EDIT',
 					        idtable: $("#courseselector :selected").val(),
-					        id: source 
+					        id: source, 
+					        data: $("#newval"+source).val()
 					    }).done(function(response) {
 					    	//alert('Response <editpos>: '+response);
 					    	$("#"+source+"f").children(".fa-check-square-o").text('Изменить').removeClass('fa-check-square-o').addClass('fa-pencil-square-o');
@@ -214,14 +222,14 @@
 					$("#tableviewer thead tr").append('<th>head</th><th><a href="javascript:adddate();" class="icon fa-plus"></a></th>"');
 					$("#tableviewer tbody tr").append('<td><a href="" class="icon fa-times"></a></td>');
 					
-					/*$.post('/table.php', {
+					$.post('./table.php', {
 				    	type: 'ADDDATE',
 				        idtable: $("#courseselector :selected").val() 
 				    }).done(function(response) {
-				        
+				        alert(response);
 				    }).fail(function() {
 				        alert('No connection ')
-				    });*/
+				    });
 				}
 
 				function addstudent() {
@@ -233,14 +241,14 @@
 						}
 					}					
 					
-					/*$.post('/table.php', {
+					$.post('./table.php', {
 				    	type: 'ADDSTUDENT',
 				        idtable: $("#courseselector :selected").val() 
 				    }).done(function(response) {
-				        
+				        alert(response);
 				    }).fail(function() {
 				        alert('No connection ')
-				    });*/
+				    });
 				}
 
 				function change(source) {
@@ -255,7 +263,17 @@
 					var s2 ="'"+source+"'";
 					if (!$("#"+source).is('a')) {
 						var t = $("#newval"+source).val();
-						$("#newval"+source).closest("td").html('<a id="'+source+'" href="javascript:changename('+s2+')">'+t+'</a>');
+						$.post('./table.php', {
+					    	type: 'CHANGENAME',
+					        idtable: $("#courseselector :selected").val(),
+					        id: source,
+					        data: t 
+					    }).done(function(response) {
+					        alert(response);					        
+							$("#newval"+source).closest("td").html('<a id="'+source+'" href="javascript:changename('+s2+')">'+t+'</a>');
+					    }).fail(function() {
+					        alert('No connection')
+					    });
 					} else {
 						var t = $("#"+source).text();
 						$("#"+source).hide();
@@ -267,7 +285,17 @@
 					var s2 ="'"+source+"'";
 					if (!$("#"+source).is('a')) {
 						var t = $("#newval"+source).val();
-						$("#newval"+source).closest("th").html('<a id="'+source+'" href="javascript:changedate('+s2+')">'+t+'</a>');
+						$.post('./table.php', {
+					    	type: 'CHANGEDATE',
+					        idtable: $("#courseselector :selected").val(),
+					        id: source,
+					        data: t 
+					    }).done(function(response) {
+					        alert(response);					        
+							$("#newval"+source).closest("th").html('<a id="'+source+'" href="javascript:changedate('+s2+')">'+t+'</a>');
+					    }).fail(function() {
+					        alert('No connection')
+					    });						
 					} else {
 						var t = $("#"+source).text();
 						$("#"+source).hide();
@@ -282,14 +310,14 @@
 					$('#tableviewer').empty();
 					$('#tablehelp').text('Подгружаем таблицу...');
 					location.href = '#htable';            
-				    $.get('/showtable', {
+				    $.get('./table.php', {
 				        idtable: $("#courseselector :selected").val(),
 				        id: $("input[name='groupselector']:checked").attr("id")
 				    }).done(function(response) {
 				    	$('#tablehelp').empty();
 				        $('#tableviewer').html(response)
 				    }).fail(function() {
-				        $('#tablehelp').text('Unable to show')
+				        $('#tablehelp').text('Нет соединения с сервером')
 				    });            
 				}
 			</script>

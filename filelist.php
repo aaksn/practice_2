@@ -1,14 +1,19 @@
 <?php
-/*
-Сюда приходит get запрос, нужно вернуть html типа такого 
+//Отображение списка таблиц
+if (!empty($_GET["id"])) {
+	echo " Data id:".$_GET["id"]."" ;
+}
 
-{% for file in files %}
-
-	<li id="{{ file.id }}f">
-		<input type="radio" id="{{ file.id }}" name="fileselector" />
-		<label for="{{ file.id }}">{{ file.name }}</label>
-		<a href="javascript:deletefile('#{{ file.id }}');" class="button primary small icon fa-trash">Удалить</a>
-	</li>
-{% endfor %}
-*/
+//Редактирование списка таблиц
+if (!empty($_POST["idtable"])&&!empty($_POST["type"])) {	
+	if ($_POST["type"] == 'ADD') {
+		echo "Type: ADD" ;
+	}
+	if ($_POST["type"] == 'DEL') {
+		echo "Type: DEL" ;
+	}
+	if ($_POST["type"] == 'EDIT'&&!empty($_POST["data"])) {
+		echo "Type: EDIT, Data: ".$_POST["data"]."" ;
+	}
+}
 ?>

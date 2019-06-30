@@ -1,32 +1,23 @@
 <?php
-/*
-юда приходит get запрос, в нем id таблицы, нужно вернуть html типа такого 
-{% block table %}
-	<thead>		
-		<tr>
-			<th rowspan="2">Имя</th>
-			{% for subjects in subjects_name %}
-				<th colspan="{{ periodslength }}">{{ subjects }}</th>
-			{% endfor %}
-		</tr>
-		<tr>
-			{% for name in subjects_name %}
-				{% for period in periods %}
-					<th>{{ period }}</th>
-				{% endfor %}				
-			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		{% for student in student_list %}
-			<tr>
-				<td>{{student.name}}</td>
-				{% for mark in student.marks %}
-					<td>{{mark}}</td>
-				{% endfor %}				
-			</tr>
-		{% endfor %}
-	</tbody>
-{% endblock %}
-*/
+//Отображение таблицы
+if (!empty($_GET["idtable"])) {
+	if (!empty($_GET["id"])) {
+		echo " Data id:".$_GET["id"]."" ;
+	} else {
+		echo "Выберите группу";
+	}
+}
+
+//Редактирование таблицы
+if (!empty($_POST["type"]) && !empty($_POST["idtable"])) {	
+	if ($_POST["type"] == 'ADDSTUDENT') {
+		echo "Type: ADDSTUDENT Table id is:".$_POST["idtable"]."" ;
+	}
+	if ($_POST["type"] == 'CHANGENAME' && !empty($_POST["id"]) && !empty($_POST["data"])) {
+		echo "Type: CHANGENAME Id is:".$_POST["idtable"]."" ;
+	}
+	if ($_POST["type"] == 'CHANGEDATE' && !empty($_POST["id"]) && !empty($_POST["data"])) {
+		echo "Type: CHANGEDATE Id is:".$_POST["idtable"]."" ;
+	}
+}
 ?>
