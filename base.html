@@ -85,26 +85,25 @@
 								<h2 id="htable">Посещаемость</h2>
 							</header>							
 							<div class="table-wrapper">
-								<span id="tablehelp">Для отображения необходимо выбрать группу</span>
+								<span id="tablehelp">Для отображения необходимо выбрать группу</span>								
 								<table class="alt" id="tableviewer">
 									<thead>		
 										<tr>
 											<th>Имя</th>
-											<th>01.01</th>
+											<th><a id="d1" href="javascript:changedate('d1')">01.01</a></th>
 											<th>02.02</th>
 											<th>04.12</th>
 											<th>05.12</th>
-											<th><a href="" class="icon fa-plus"></a></th>
+											<th><a href="javascript:adddate();" class="icon fa-plus"></a></th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
-											<td>Name1</td>
-											<td><a href="" class="icon fa-times"></a></td>
+											<td><a id="n1" href="javascript:changename('n1')">Name1</a></td>
+											<td><a id="m1" href="javascript:change('m1');" class="icon fa-times"></a></td>
 											<td><a href="" class="icon fa-check"></a></td>
 											<td><a href="" class="icon fa-check"></a></td>
 											<td><a href="" class="icon fa-check"></a></td>
-											<td></td>	
 										</tr>
 										<tr>
 											<td>Name2</td>
@@ -112,12 +111,11 @@
 											<td><a href="" class="icon fa-check"></a></td>
 											<td><a href="" class="icon fa-check"></a></td>
 											<td><a href="" class="icon fa-check"></a></td>
-											<td></td>	
 										</tr>
 									</tbody>
 									<tfoot>
 										<tr>
-											<td><a href="" class="icon fa-plus"> Добавить студента</a></td>
+											<td><a href="javascript:addstudent();" class="icon fa-plus"> Добавить студента</a></td>
 										</tr>
 									</tfoot>
 								</table>
@@ -170,13 +168,10 @@
 				        id: source,
 				        idtable: $("#courseselector :selected").val() 
 				    }).done(function(response) {
-				        $(response).detach()
+				        $('#'+source+'f').detach();
 				    }).fail(function() {
 				        alert('No connection ')
 				    });
-				    $('#courses').html('<b>Source</b> '+source+' idtable' + $("#courseselector :selected").val());
-
-			    	$('#'+source+'f').detach();
 				}
 
 				function addpos(source) {            
@@ -193,28 +188,92 @@
 				}
 
 				function editpos(source) {
-					
 					if ($("#"+source+"f").children().is('.fa-check-square-o')) {
-						$("#"+source+"f").children(".fa-check-square-o").text('Изменить').removeClass('fa-check-square-o').addClass('fa-pencil-square-o');
-						$("label[for='"+source+"']").html('n курс');
+						$.post('/filelist.php', {
+					    	type: 'EDIT',
+					        idtable: $("#courseselector :selected").val(),
+					        id: source 
+					    }).done(function(response) {
+					    	//alert('Response <editpos>: '+response);
+					    	$("#"+source+"f").children(".fa-check-square-o").text('Изменить').removeClass('fa-check-square-o').addClass('fa-pencil-square-o');
+							$("label[for='"+source+"']").html($("#newval"+source).val());
+					    }).fail(function() {
+					        alert('Нет соединения с сервером')
+					    });
 					} else {
 						var w = $("label[for='"+source+"']").css('width');
 						var t = $("label[for='"+source+"']").text();						
-						$("label[for='"+source+"']").html('<input type="text" name="newval" id="newval" value="" style="height: 2rem">').css('width', 2*w);
-						$("#newval").val(t);
+						$("label[for='"+source+"']").html('<input type="text" name="newval" id="newval'+source+'" value="" style="height: 2rem">').css('width', 2*w);
+						$("#newval"+source).val(t);
 						$("#"+source+"f").children(".fa-pencil-square-o").text('OK').removeClass('fa-pencil-square-o').addClass('fa-check-square-o');
 					};			    
 				}
 
-				function endedit(source) {            
-				    $.post('/filelist.php', {
-				    	type: 'ADD',
+				function adddate() {
+					$("#tableviewer thead th:last").detach();
+					$("#tableviewer thead tr").append('<th>head</th><th><a href="javascript:adddate();" class="icon fa-plus"></a></th>"');
+					$("#tableviewer tbody tr").append('<td><a href="" class="icon fa-times"></a></td>');
+					
+					/*$.post('/table.php', {
+				    	type: 'ADDDATE',
 				        idtable: $("#courseselector :selected").val() 
 				    }).done(function(response) {
-				        $('#courses').append('<li id="'+response+'f"><input type="radio" id="'+response+'" name="groupselector" /><label for="'+response+'">'+response+' группа</label><a href="javascript:deletepos('+response+');" class="button primary small icon fa-trash">Удалить</a></li>');
+				        
 				    }).fail(function() {
-				        //alert('No connection ')
-				    });				    
+				        alert('No connection ')
+				    });*/
+				}
+
+				function addstudent() {
+					$("#tableviewer tbody").append('<tr></tr>');
+					$("#tableviewer tbody tr:last").append('<td>Name2</td>');
+					if ($("#tableviewer tbody tr").length > 1) {
+						for (var i = $("#tableviewer tbody tr:first td").length - 2; i >= 0; i--) {
+							$("#tableviewer tbody tr:last").append('<td><a href="" class="icon fa-times"></a></td>');
+						}
+					}					
+					
+					/*$.post('/table.php', {
+				    	type: 'ADDSTUDENT',
+				        idtable: $("#courseselector :selected").val() 
+				    }).done(function(response) {
+				        
+				    }).fail(function() {
+				        alert('No connection ')
+				    });*/
+				}
+
+				function change(source) {
+					if ($('#'+source).is('.fa-times')) {
+						$('#'+source).removeClass('fa-times').addClass('fa-check');
+					} else {
+						$('#'+source).removeClass('fa-check').addClass('fa-times');
+					}
+				}
+
+				function changename(source) {
+					var s2 ="'"+source+"'";
+					if (!$("#"+source).is('a')) {
+						var t = $("#newval"+source).val();
+						$("#newval"+source).closest("td").html('<a id="'+source+'" href="javascript:changename('+s2+')">'+t+'</a>');
+					} else {
+						var t = $("#"+source).text();
+						$("#"+source).hide();
+						$("#"+source).closest("td").html('<input type="text" name="newval" id="newval'+source+'" value="" style="height: 2rem"><a href="javascript:changename('+s2+')" class="button icon fa-check">Сохранить</a>');						
+						$("#newval"+source).val(t);
+					}
+				}
+				function changedate(source) {
+					var s2 ="'"+source+"'";
+					if (!$("#"+source).is('a')) {
+						var t = $("#newval"+source).val();
+						$("#newval"+source).closest("th").html('<a id="'+source+'" href="javascript:changedate('+s2+')">'+t+'</a>');
+					} else {
+						var t = $("#"+source).text();
+						$("#"+source).hide();
+						$("#"+source).closest("th").html('<input type="text" name="newval" id="newval'+source+'" value="" style="height: 2rem"><a href="javascript:changedate('+s2+')" class="button icon fa-check">Сохранить</a>');						
+						$("#newval"+source).val(t);
+					}
 				}
 
 				function showtable() {
