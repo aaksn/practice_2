@@ -26,7 +26,8 @@
 						<div class="content">
 							<h2>Выберите группу</h2>
 							<form method="POST" id="form" action="/up" enctype="multipart/form-data">
-								<ul class="alt">
+								<ul class="alt">									
+									<!-- Пример списка групп -->
 									<h2><select name="courseselector" id="courseselector" class="select alt">	
 										<option value="1">1</option>
 										<option value="2">2</option>
@@ -36,6 +37,7 @@
 										<option value="6">2 маг.</option>
 									</select> курс</h2>
 									<div id="courses"></div>
+									
 									<li>
 										<a href="javascript:addpos();" class="button icon fa-plus">Добавить</a>
 									</li>
@@ -54,7 +56,8 @@
 									    Импорт из EXCEL
 									</label>
 									<input id="file-upload" name="file_upload" type="file"/>
-								</li>								
+								</li>
+								
 								<li><a href="./login.html" class="button icon fa-download">Скачать EXCEL</a></li>
 								<li><a href="./login.html" class="button icon fa-download">Скачать PDF</a></li>
 							</ul>
@@ -74,20 +77,20 @@
 							<div class="table-wrapper">
 								<span id="tablehelp">Для отображения необходимо выбрать группу</span>								
 								<table class="alt" id="tableviewer">
-									<!--<thead>		
+									<thead>		
 										<tr>
 											<th>Имя</th>
 											<th><a id="d1" href="javascript:changedate('d1')">01.01</a></th>
 											<th>02.02</th>
 											<th>04.12</th>
 											<th>05.12</th>
-											<th><a href="javascript:adddate()" class="icon fa-plus"></a></th>
+											<th><a href="javascript:adddate();" class="icon fa-plus"></a></th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
 											<td><a id="n1" href="javascript:changename('n1')">Name1</a></td>
-											<td><a id="m1" href="javascript:change('m1')" class="icon fa-times"></a></td>
+											<td><a id="m1" href="javascript:change('m1');" class="icon fa-times"></a></td>
 											<td><a href="" class="icon fa-check"></a></td>
 											<td><a href="" class="icon fa-check"></a></td>
 											<td><a href="" class="icon fa-check"></a></td>
@@ -102,9 +105,9 @@
 									</tbody>
 									<tfoot>
 										<tr>
-											<td><a href="javascript:addstudent()" class="icon fa-plus"> Добавить студента</a></td>
+											<td><a href="javascript:addstudent();" class="icon fa-plus"> Добавить студента</a></td>
 										</tr>
-									</tfoot>-->
+									</tfoot>
 								</table>
 							</div>
 						</div>
@@ -182,29 +185,32 @@
 				}
 
 				function editpos(source) {
-					if ($("#"+source+"f").children().is('.fa-check-square-o')) {
+				    //не работает
+					if ($("#"+source+" a:only-of-type").is('.button primary small icon fa-check-square-o')) {
+					    alert('s'+source);
 						$.post('./filelist.php', {
 					    	type: 'EDIT',
 					        idtable: $("#courseselector :selected").val(),
 					        id: source, 
 					        data: $("#newval"+source).val()
 					    }).done(function(response) {
-					    	//alert('Response <editpos>: '+response);
-					    	$("#"+source+"f").children(".fa-check-square-o").text('Изменить').removeClass('fa-check-square-o').addClass('fa-pencil-square-o');
+					    	alert('Response <editpos>: '+response);
+					    	$("#"+source+" a:only-of-type").text('Изменить').removeClass('fa-check-square-o').addClass('fa-pencil-square-o');
 							$("label[for='"+source+"']").html($("#newval"+source).val());
 					    }).fail(function() {
 					        alert('Нет соединения с сервером')
 					    });
 					} else {
+					    alert('else')
 						var w = $("label[for='"+source+"']").css('width');
 						var t = $("label[for='"+source+"']").text();						
 						$("label[for='"+source+"']").html('<input type="text" name="newval" id="newval'+source+'" value="" style="height: 2rem">').css('width', 2*w);
 						$("#newval"+source).val(t);
-						$("#"+source+"f").children(".fa-pencil-square-o").text('OK').removeClass('fa-pencil-square-o').addClass('fa-check-square-o');
+						$("#"+source+"f").children(".button primary small icon fa-pencil-square-o").text('OK').removeClass('fa-pencil-square-o').addClass('fa-check-square-o');
 					};			    
 				}
-
-				function adddate() {
+                
+                function adddate() {
 					$("#tableviewer thead th:last").detach();
 					var response = 99;
 					$("#tableviewer thead tr").append('<th><a id="d'+response+'" href="javascript:changedate('+"'d"+response+"'"+')">01.01</a></th><th><a href="javascript:adddate()" class="icon fa-plus"></a></th>"');
@@ -262,7 +268,7 @@
 					        id: source,
 					        data: t 
 					    }).done(function(response) {
-					        alert(response);					        
+					        //alert(response);					        
 							$("#newval"+source).closest("td").html('<a id="'+source+'" href="javascript:changename('+s2+')">'+t+'</a>');
 					    }).fail(function() {
 					        alert('No connection')
