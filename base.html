@@ -148,13 +148,12 @@
         function () {
             $('#actions').hide();
             
-            var e = $("#courseselector :selected").val();
             $.get('./filelist.php', {
-                course: e
+                course: $("#courseselector :selected").val()
             }).done(function (response) {
                 $('#subjectselector').html(response);
                 $.get('./filelist.php', {
-                    courseid: e,
+                    courseid: $("#courseselector :selected").val(),
                 	subjectid: $("#subjectselector :selected").val()
                 }).done(function (response) {
                     $('#courses').html(response)
@@ -166,16 +165,14 @@
             });
         });
 
-    document.getElementById("courseselector").onchange = function changecourse() {
-        var e = $("#courseselector :selected").val();
-        var s = $("#subjectselector :selected").val();
+    document.getElementById("courseselector").onchange = function changecourse() {        
         $.get('./filelist.php', {
-            course: e
+            course: $("#courseselector :selected").val()
         }).done(function (response) {
             $('#subjectselector').html(response);
             $.get('./filelist.php', {
-                courseid: e,
-                subjectid: s
+                courseid: $("#courseselector :selected").val(),
+                subjectid: $("#subjectselector :selected").val()
             }).done(function (response) {
                 $('#courses').html(response)
             }).fail(function () {
