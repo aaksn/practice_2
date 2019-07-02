@@ -6,11 +6,11 @@ $password = ''; // пароль
 
 //Отображение списка предметов
 if (!empty($_GET["course"])) {
-    //$id = $_GET["id"] - 1;
+    $id = $_GET["course"];
     //echo " Data id:".$_GET["id"]."" ;
     $link = mysqli_connect($host, $user, $password, $database)
     or die("Ошибка " . mysqli_error($link));
-    $query = "SELECT * FROM SUBJECTS";
+    $query = "SELECT * FROM SUBJECTS WHERE ID_COURSE=$id";
     $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
     if ($result) {
         $subjects = []; // Массив для хранения данных
@@ -38,8 +38,7 @@ if (!empty($_GET["id"])) {
     $link = mysqli_connect($host, $user, $password, $database)
     or die("Ошибка " . mysqli_error($link));
     // выполняем операции с базой данных
-    $coursetables = "GROUPS";//.$_GET["id"];
-    $query = "SELECT * FROM $coursetables WHERE ID_COURSE=$id";
+    $query = "SELECT * FROM GROUPS WHERE ID_COURSE=$id";
     $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
     if ($result) {
         $course = []; // Массив для хранения данных

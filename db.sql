@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Июл 02 2019 г., 18:52
+-- Время создания: Июл 02 2019 г., 19:36
 -- Версия сервера: 10.3.13-MariaDB
 -- Версия PHP: 7.1.22
 
@@ -140,16 +140,17 @@ INSERT INTO `students` (`ID_STUDENT`, `FIO`, `ID_GROUP`, `ID_COURSE`) VALUES
 
 CREATE TABLE `subjects` (
   `ID_SUBJECT` int(11) NOT NULL,
-  `SUBJECT_NAME` varchar(40) NOT NULL
+  `SUBJECT_NAME` varchar(40) NOT NULL,
+  `ID_COURSE` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `subjects`
 --
 
-INSERT INTO `subjects` (`ID_SUBJECT`, `SUBJECT_NAME`) VALUES
-(2, 'ТИПИС'),
-(1, 'УрМат');
+INSERT INTO `subjects` (`ID_SUBJECT`, `SUBJECT_NAME`, `ID_COURSE`) VALUES
+(1, 'УрМат', 2),
+(2, 'ТИПИС', 1);
 
 -- --------------------------------------------------------
 
@@ -220,7 +221,8 @@ ALTER TABLE `students`
 --
 ALTER TABLE `subjects`
   ADD PRIMARY KEY (`ID_SUBJECT`),
-  ADD UNIQUE KEY `subject_name` (`SUBJECT_NAME`);
+  ADD UNIQUE KEY `subject_name` (`SUBJECT_NAME`),
+  ADD KEY `ID_COURSE` (`ID_COURSE`);
 
 --
 -- Индексы таблицы `users`
@@ -287,6 +289,12 @@ ALTER TABLE `groups`
 ALTER TABLE `students`
   ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`ID_COURSE`) REFERENCES `courses` (`ID_COURSE`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `students_ibfk_2` FOREIGN KEY (`ID_GROUP`) REFERENCES `groups` (`ID_GROUP`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `subjects`
+--
+ALTER TABLE `subjects`
+  ADD CONSTRAINT `subjects_ibfk_1` FOREIGN KEY (`ID_COURSE`) REFERENCES `courses` (`ID_COURSE`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `users`
