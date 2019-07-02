@@ -32,13 +32,14 @@ if (!empty($_GET["course"])) {
 
 
 //Отображение списка таблиц
-if (!empty($_GET["id"])) {
-    $id = $_GET["id"];
+if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"])) {
+    $courseid = $_GET["courseid"];
+    $subjectid = $_GET["subjectid"];
     // подключаемся к серверу
     $link = mysqli_connect($host, $user, $password, $database)
     or die("Ошибка " . mysqli_error($link));
     // выполняем операции с базой данных
-    $query = "SELECT * FROM groups WHERE ID_COURSE=$id";
+    $query = "SELECT * FROM groups WHERE ID_COURSE=$courseid";
     $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
     if ($result) {
         $course = []; // Массив для хранения данных

@@ -149,13 +149,15 @@
             $('#actions').hide();
 
             var e = $("#courseselector :selected").val();
-
+            var s = $("#subjectselector :selected").val();
+            
             $.get('./filelist.php', {
                 course: e
             }).done(function (response) {
                 $('#subjectselector').html(response);
                 $.get('./filelist.php', {
-                    id: e
+                    courseid: e,
+                	subjectid: s
                 }).done(function (response) {
                     $('#courses').html(response)
                 }).fail(function () {
@@ -174,7 +176,8 @@
         }).done(function (response) {
             $('#subjectselector').html(response);
             $.get('./filelist.php', {
-                id: e
+                courseid: e,
+                subjectid: s
             }).done(function (response) {
                 $('#courses').html(response)
             }).fail(function () {
