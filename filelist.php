@@ -39,7 +39,7 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"])) {
     $link = mysqli_connect($host, $user, $password, $database)
     or die("Ошибка " . mysqli_error($link));
     // выполняем операции с базой данных
-    $query = "SELECT * FROM groups WHERE ID_COURSE=$courseid";
+    $query = "SELECT * FROM groups WHERE ID_COURSE=$courseid AND ID_SUBJECT=$subjectid";
     $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
     if ($result) {
         $course = []; // Массив для хранения данных
@@ -67,19 +67,19 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
     $subjectid = $_POST["subjectid"];
     if ($_POST["type"] == "ADD") {
         // подключаемся к серверу
-        $link = mysqli_connect($host, $user, $password, $database)
-        or die("Ошибка " . mysqli_error($link));
+        $link = mysqli_connect($host, $user, $password, $database) or die("Ошибка " . mysqli_error($link));
         // выполняем операции с базой данных
-        $n = mysqli_query($link, "SELECT max(ID_GROUP) as maxid FROM groups WHERE ID_COURSE=$courseid") or die("Ошибка " . mysqli_error($link));
+        $n = mysqli_query($link, "SELECT max(ID_GROUP) as maxid FROM groups WHERE ID_COURSE=$courseid AND ID_SUBJECT=$subjectid") or die("Ошибка " . mysqli_error($link));
         $u = mysqli_fetch_row($n)[0] + 1;
-        mysqli_query($link, "INSERT INTO groups (`ID_GROUP`, `GROUP_NAME`, `ID_COURSE`)  VALUES ($u ,'$u группа',$courseid)") or die("Ошибка " . mysqli_error($link));
+        mysqli_query($link, "INSERT INTO groups(`ID_GROUP`, `GROUP_NAME`, `ID_COURSE`, `ID_SUBJECT`)  VALUES ($u ,'$u группа',$courseid,$subjectid)") or die("Ошибка " . mysqli_error($link));
         // закрываем подключение
         mysqli_close($link);
 
         echo "$u";
     }
-    if ($_POST["type"] == 'DEL' && !empty($_POST["groupid"])) {       
+    if ($_POST["type"] == 'DEL' && !empty($_POST["groupid"])) {
         $groupid = $_POST["groupid"];
+        
         // подключаемся к серверу
         $link = mysqli_connect($host, $user, $password, $database)
         or die("Ошибка " . mysqli_error($link));
@@ -91,7 +91,7 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
         echo "Deleted";
     }
     if ($_POST["type"] == 'EDIT' && !empty($_POST["data"])) {
-    	$groupid = $_POST["groupid"];
+        $groupid = $_POST["groupid"];
         $data = $_POST["data"];
         
         // подключаемся к серверу
