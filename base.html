@@ -1,335 +1,341 @@
 <!DOCTYPE HTML>
 
 <html>
-	<head>
-		<title>Просмотр посещаемости</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>		
-	</head>
-	<body class="is-preload">
+<head>
+    <title>Просмотр посещаемости</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="assets/css/main.css"/>
+    <noscript>
+        <link rel="stylesheet" href="assets/css/noscript.css"/>
+    </noscript>
+</head>
+<body class="is-preload">
 
-		<!-- Wrapper -->
-			<div id="wrapper" class="divided">
+<!-- Wrapper -->
+<div id="wrapper" class="divided">
 
-				<!-- One -->
-					<section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
-						<div class="content">
-							<h1>Просмотр посещаемости</h1>
-							<p class="major">Выберите группу из списка и нажмите &quot;Начать просмотр&quot;. Для доступа к редактированию нажмите &quot;Войти&quot;</p>
-							<ul class="actions fit">
-								<li><a href="javascript:showtable();" class="button primary big wide smooth-scroll-middle">Начать просмотр</a></li>
-								<li><a href="./login.html" class="button primary big wide smooth-scroll-middle">Войти</a></li>
-							</ul>
-						</div>						
-						<div class="content">
-							<h2>Выберите группу</h2>
-							<form method="POST" id="form" action="/up" enctype="multipart/form-data">
-								<ul class="alt">									
-									<!-- Пример списка групп -->
-									<h2><select name="courseselector" id="courseselector" class="select alt">	
-										<option value="1">1</option>
-										<option value="2">2</option>
-										<option value="3">3</option>
-										<option value="4">4</option>
-										<option value="5">1 маг.</option>
-										<option value="6">2 маг.</option>
-									</select> курс</h2>
-									<p><select name="subjectselector" id="subjectselector" class="select">
-									</select></p>
-									
-									<div id="courses"></div>
-									
-									<li>
-										<a href="javascript:addpos();" class="button icon fa-plus">Добавить</a>
-									</li>
-								</ul>
-							</form>
-						</div>
-					</section>
+    <!-- One -->
+    <section
+            class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
+        <div class="content">
+            <h1>Просмотр посещаемости</h1>
+            <p class="major">Выберите группу из списка и нажмите &quot;Начать просмотр&quot;. Для доступа к
+                редактированию нажмите &quot;Войти&quot;</p>
+            <ul class="actions fit">
+                <li><a href="javascript:showtable();" class="button primary big wide smooth-scroll-middle">Начать
+                    просмотр</a></li>
+                <li><a href="./login.html" class="button primary big wide smooth-scroll-middle">Войти</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <h2>Выберите группу</h2>
+            <form method="POST" id="form" action="/up" enctype="multipart/form-data">
+                <ul class="alt">
+                    <!-- Пример списка групп -->
+                    <h2><select name="courseselector" id="courseselector" class="select alt">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">1 маг.</option>
+                        <option value="6">2 маг.</option>
+                    </select> курс
+                    </h2>
 
-				<!-- Actions -->
+                    <p><select name="subjectselector" id="subjectselector" class="select">
 
-					<section class="wrapper style1 align-center color1 invert" id="actions">
-						<div class="inner">
-							<ul class="actions fit" style="margin-bottom: 0px;">
-								<li>
-									<label for="file-upload" class="button icon fa-upload">
-									    Импорт из EXCEL
-									</label>
-									<input id="file-upload" name="file_upload" type="file"/>
-								</li>
-								
-								<li><a href="./login.html" class="button icon fa-download">Скачать EXCEL</a></li>
-								<li><a href="./login.html" class="button icon fa-download">Скачать PDF</a></li>
-							</ul>
-						</div>
-						
-					</section>
-					
-				
+                    </select></p>
 
-				<!-- Table -->
-					<section class="wrapper style1 align-center">
-						
-						<div class="inner">
-							<header>
-								<h2 id="htable">Посещаемость</h2>
-							</header>							
-							<div class="table-wrapper">
-								<span id="tablehelp">Для отображения необходимо выбрать группу</span>								
-								<table class="alt" id="tableviewer">
-									<thead>		
-										<tr>
-											<th>Имя</th>
-											<th><a id="d1" href="javascript:changedate('d1')">01.01</a></th>
-											<th>02.02</th>
-											<th>04.12</th>
-											<th>05.12</th>
-											<th><a href="javascript:adddate();" class="icon fa-plus"></a></th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td><a id="n1" href="javascript:changename('n1')">Name1</a></td>
-											<td><a id="m1" href="javascript:change('m1');" class="icon fa-times"></a></td>
-											<td><a href="" class="icon fa-check"></a></td>
-											<td><a href="" class="icon fa-check"></a></td>
-											<td><a href="" class="icon fa-check"></a></td>
-										</tr>
-										<tr>
-											<td>Name2</td>
-											<td><a href="" class="icon fa-times"></a></td>
-											<td><a href="" class="icon fa-check"></a></td>
-											<td><a href="" class="icon fa-check"></a></td>
-											<td><a href="" class="icon fa-check"></a></td>
-										</tr>
-									</tbody>
-									<tfoot>
-										<tr>
-											<td><a href="javascript:addstudent();" class="icon fa-plus"> Добавить студента</a></td>
-										</tr>
-									</tfoot>
-								</table>
-							</div>
-						</div>
-					</section>
-				
-				<!-- Footer -->
-					<footer class="wrapper style1 align-center">
-						<div class="inner">							
-							<p>&copy; Антон Аксенов, Руслан Погорелов. 2019.</p>
-						</div>
-					</footer>
+                    <div id="courses"></div>
 
-			</div>
+                    <li>
+                        <a href="javascript:addpos();" class="button icon fa-plus">Добавить</a>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </section>
 
-		<!-- Scripts -->
+    <!-- Actions -->
+
+    <section class="wrapper style1 align-center color1 invert" id="actions">
+        <div class="inner">
+            <ul class="actions fit" style="margin-bottom: 0px;">
+                <li>
+                    <label for="file-upload" class="button icon fa-upload">
+                        Импорт из EXCEL
+                    </label>
+                    <input id="file-upload" name="file_upload" type="file"/>
+                </li>
+
+                <li><a href="./login.html" class="button icon fa-download">Скачать EXCEL</a></li>
+                <li><a href="./login.html" class="button icon fa-download">Скачать PDF</a></li>
+            </ul>
+        </div>
+
+    </section>
 
 
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-			<!--<script src="assets/js/base.js"></script>-->
-			<script type="text/javascript">
-				$(document).ready(
-				    function() {
-				        $('#actions').hide();
+    <!-- Table -->
+    <section class="wrapper style1 align-center">
 
-				        var e = $("#courseselector :selected").val();
-						$.get('./filelist.php', {
-					        course: e
-					    }).done(function(response) {
-					        $('#subjectselector').html(response);
-					        $.get('./filelist.php', {
-    					        id: e
-    					    }).done(function(response) {
-    					        $('#courses').html(response)
-    					    }).fail(function() {
-    					        $('#courses').text('Не удалось подключиться к серверу')
-    					    });
-					    }).fail(function() {
-					        $('#courses').text('Не удалось подключиться к серверу')
-					    });
-				    });
+        <div class="inner">
+            <header>
+                <h2 id="htable">Посещаемость</h2>
+            </header>
+            <div class="table-wrapper">
+                <span id="tablehelp">Для отображения необходимо выбрать группу</span>
+                <table class="alt" id="tableviewer">
+                    <thead>
+                    <tr>
+                        <th>Имя</th>
+                        <th><a id="d1" href="javascript:changedate('d1')">01.01</a></th>
+                        <th>02.02</th>
+                        <th>04.12</th>
+                        <th>05.12</th>
+                        <th><a href="javascript:adddate();" class="icon fa-plus"></a></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><a id="n1" href="javascript:changename('n1')">Name1</a></td>
+                        <td><a id="m1" href="javascript:change('m1');" class="icon fa-times"></a></td>
+                        <td><a href="" class="icon fa-check"></a></td>
+                        <td><a href="" class="icon fa-check"></a></td>
+                        <td><a href="" class="icon fa-check"></a></td>
+                    </tr>
+                    <tr>
+                        <td>Name2</td>
+                        <td><a href="" class="icon fa-times"></a></td>
+                        <td><a href="" class="icon fa-check"></a></td>
+                        <td><a href="" class="icon fa-check"></a></td>
+                        <td><a href="" class="icon fa-check"></a></td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td><a href="javascript:addstudent();" class="icon fa-plus"> Добавить студента</a></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </section>
 
-				document.getElementById("courseselector").onchange = function changecourse()
-				{
-					var e = $("#courseselector :selected").val();
-					$.get('./filelist.php', {
-				        id: e
-				    }).done(function(response) {
-				    	
-				        $('#courses').html(response)
-				    }).fail(function() {
-				        $('#courses').text('Unable to show')
-				    });					
-				}
+    <!-- Footer -->
+    <footer class="wrapper style1 align-center">
+        <div class="inner">
+            <p>&copy; Антон Аксенов, Руслан Погорелов. 2019.</p>
+        </div>
+    </footer>
 
-				function deletepos(source) {            
-				    $.post('./filelist.php', {
-				    	type: 'DEL',                
-				        id: source,
-				        idtable: $("#courseselector :selected").val() 
-				    }).done(function(response) {
-				        $('#'+source+'f').detach();
-				    }).fail(function() {
-				        alert('No connection ')
-				    });
-				}
+</div>
 
-				function addpos(source) {            
-				    $.post('./filelist.php', {
-				    	type: 'ADD',
-				        idtable: $("#courseselector :selected").val() 
-				    }).done(function(response) {
-				        $('#courses').append('<li id="'+response+'f"><input type="radio" id="'+response+'" name="groupselector" /><label for="'+response+'">'+response+' группа</label><a href="javascript:editpos('+response+');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos('+response+');" class="button primary small icon fa-trash">Удалить</a></li>');
-				    }).fail(function() {
-				        alert('No connection ')
-				    });
-				}
+<!-- Scripts -->
 
-				function editpos(source) {
-				    //не работает
-					if ($("#"+source+" a:only-of-type").is('.button primary small icon fa-check-square-o')) {
-					    alert('s'+source);
-						$.post('./filelist.php', {
-					    	type: 'EDIT',
-					        idtable: $("#courseselector :selected").val(),
-					        id: source, 
-					        data: $("#newval"+source).val()
-					    }).done(function(response) {
-					    	alert('Response <editpos>: '+response);
-					    	$("#"+source+" a:only-of-type").text('Изменить').removeClass('fa-check-square-o').addClass('fa-pencil-square-o');
-							$("label[for='"+source+"']").html($("#newval"+source).val());
-					    }).fail(function() {
-					        alert('Нет соединения с сервером')
-					    });
-					} else {
-					    alert('else')
-						var w = $("label[for='"+source+"']").css('width');
-						var t = $("label[for='"+source+"']").text();						
-						$("label[for='"+source+"']").html('<input type="text" name="newval" id="newval'+source+'" value="" style="height: 2rem">').css('width', 2*w);
-						$("#newval"+source).val(t);
-						$("#"+source+"f").children(".button primary small icon fa-pencil-square-o").text('OK').removeClass('fa-pencil-square-o').addClass('fa-check-square-o');
-					};			    
-				}
-                
-                function adddate() {
-					$("#tableviewer thead th:last").detach();
-					var response = 99;
-					$("#tableviewer thead tr").append('<th><a id="d'+response+'" href="javascript:changedate('+"'d"+response+"'"+')">01.01</a></th><th><a href="javascript:adddate()" class="icon fa-plus"></a></th>"');
-					//Получить id строки
-					var rownum = 98;
-					$("#tableviewer tbody tr").append('<td><a id="m'+rownum+'_'+response+'" href="javascript:change('+"'m"+rownum+'_'+response+')" class="icon fa-times"></a></td>');
-					
-					$.post('./table.php', {
-				    	type: 'ADDDATE',
-				        idtable: $("#courseselector :selected").val() 
-				    }).done(function(response) {
-				    	//response должен вернут id даты
-				        //alert(response);
-				    }).fail(function() {
-				        alert('No connection ')
-				    });
-				}
 
-				function addstudent() {
-					var response = 99;
-					var rownum = 98;
-					$("#tableviewer tbody").append('<tr></tr>');
-					$("#tableviewer tbody tr:last").append('<td><a id="n'+response+'" href="javascript:changename('+"'n"+response+"'"+')">ФИО</a></td>');
-					if ($("#tableviewer tbody tr").length > 1) {
-						for (var i = $("#tableviewer tbody tr:first td").length - 2; i >= 0; i--) {
-							$("#tableviewer tbody tr:last").append('<td><a id="m'+rownum+'_'+response+'" href="javascript:change('+"'m"+rownum+'_'+response+')" class="icon fa-times"></a></td>');
-						}
-					}					
-					
-					$.post('./table.php', {
-				    	type: 'ADDSTUDENT',
-				        idtable: $("#courseselector :selected").val() 
-				    }).done(function(response) {
-				        //alert(response);
-				    }).fail(function() {
-				        alert('No connection ')
-				    });
-				}
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/jquery.scrollex.min.js"></script>
+<script src="assets/js/jquery.scrolly.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+<!--<script src="assets/js/base.js"></script>-->
+<script type="text/javascript">
+    $(document).ready(
+        function () {
+            $('#actions').hide();
 
-				function change(source) {
-					if ($('#'+source).is('.fa-times')) {
-						$('#'+source).removeClass('fa-times').addClass('fa-check');
-					} else {
-						$('#'+source).removeClass('fa-check').addClass('fa-times');
-					}
-				}
+            var e = $("#courseselector :selected").val();
 
-				function changename(source) {
-					var s2 ="'"+source+"'";
-					if (!$("#"+source).is('a')) {
-						var t = $("#newval"+source).val();
-						$.post('./table.php', {
-					    	type: 'CHANGENAME',
-					        idtable: $("#courseselector :selected").val(),
-					        id: source,
-					        data: t 
-					    }).done(function(response) {
-					        //alert(response);					        
-							$("#newval"+source).closest("td").html('<a id="'+source+'" href="javascript:changename('+s2+')">'+t+'</a>');
-					    }).fail(function() {
-					        alert('No connection')
-					    });
-					} else {
-						var t = $("#"+source).text();
-						$("#"+source).hide();
-						$("#"+source).closest("td").html('<input type="text" name="newval" id="newval'+source+'" value="" style="height: 2rem"><a href="javascript:changename('+s2+')" class="button icon fa-check">Сохранить</a>');						
-						$("#newval"+source).val(t);
-					}
-				}
-				function changedate(source) {
-					var s2 ="'"+source+"'";
-					if (!$("#"+source).is('a')) {
-						var t = $("#newval"+source).val();
-						$.post('./table.php', {
-					    	type: 'CHANGEDATE',
-					        idtable: $("#courseselector :selected").val(),
-					        id: source,
-					        data: t 
-					    }).done(function(response) {
-					        alert(response);					        
-							$("#newval"+source).closest("th").html('<a id="'+source+'" href="javascript:changedate('+s2+')">'+t+'</a>');
-					    }).fail(function() {
-					        alert('No connection')
-					    });						
-					} else {
-						var t = $("#"+source).text();
-						$("#"+source).hide();
-						$("#"+source).closest("th").html('<input type="text" name="newval" id="newval'+source+'" value="" style="height: 2rem"><a href="javascript:changedate('+s2+')" class="button icon fa-check">Сохранить</a>');						
-						$("#newval"+source).val(t);
-					}
-				}
+            $.get('./filelist.php', {
+                course: e
+            }).done(function (response) {
+                $('#subjectselector').html(response);
+                $.get('./filelist.php', {
+                    id: e
+                }).done(function (response) {
+                    $('#courses').html(response)
+                }).fail(function () {
+                    $('#courses').text('Не удалось подключиться к серверу')
+                });
+            }).fail(function () {
+                $('#courses').text('Не удалось подключиться к серверу')
+            });
+        });
 
-				function showtable() {
-				    $('#actions').show();    
-					$('#tablehelp').empty();
-					$('#tableviewer').empty();
-					$('#tablehelp').text('Подгружаем таблицу...');
-					location.href = '#htable';            
-				    $.get('./table.php', {
-				        idtable: $("#courseselector :selected").val(),
-				        id: $("input[name='groupselector']:checked").attr("id")
-				    }).done(function(response) {
-				    	$('#tablehelp').empty();
-				        $('#tableviewer').html(response)
-				    }).fail(function() {
-				        $('#tablehelp').text('Нет соединения с сервером')
-				    });            
-				}
-			</script>
+    document.getElementById("courseselector").onchange = function changecourse() {
+        var e = $("#courseselector :selected").val();
+        $.get('./filelist.php', {
+            id: e
+        }).done(function (response) {
 
-	</body>
+            $('#courses').html(response)
+        }).fail(function () {
+            $('#courses').text('Unable to show')
+        });
+    }
+
+    function deletepos(source) {
+        $.post('./filelist.php', {
+            type: 'DEL',
+            id: source,
+            idtable: $("#courseselector :selected").val()
+        }).done(function (response) {
+            $('#' + source + 'f').detach();
+        }).fail(function () {
+            alert('No connection ')
+        });
+    }
+
+    function addpos(source) {
+        $.post('./filelist.php', {
+            type: 'ADD',
+            idtable: $("#courseselector :selected").val()
+        }).done(function (response) {
+            $('#courses').append('<li id="' + response + 'f"><input type="radio" id="' + response + '" name="groupselector" /><label for="' + response + '">' + response + ' группа</label><a href="javascript:editpos(' + response + ');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos(' + response + ');" class="button primary small icon fa-trash">Удалить</a></li>');
+        }).fail(function () {
+            alert('No connection ')
+        });
+    }
+
+    function editpos(source) {
+        if ($("#" + source + "f").children("a:first").text() == 'OK') {
+            $.post('./filelist.php', {
+                type: 'EDIT',
+                idtable: $("#courseselector :selected").val(),
+                id: source,
+                data: $("#newval" + source).val()
+            }).done(function (response) {
+                $("#" + source + "f").children("a:first").text('Изменить').removeClass('fa-check-square-o').addClass('fa-pencil-square-o');
+                $("label[for='" + source + "']").html($("#newval" + source).val());
+            }).fail(function () {
+                alert('Нет соединения с сервером')
+            });
+        } else {
+            var w = $("label[for='" + source + "']").css('width');
+            var t = $("label[for='" + source + "']").text();
+            $("label[for='" + source + "']").html('<input type="text" name="newval" id="newval' + source + '" value="" style="height: 2rem">').css('width', 2 * w);
+            $("#newval" + source).val(t);
+//$("#"+source+"f").children('first .button primary small icon fa-pencil-square-o').text('OK');
+            $("#" + source + "f").children("a:first").text('OK').removeClass('fa-pencil-square-o').addClass('fa-check-square-o');
+        }
+        ;
+    }
+
+    function adddate() {
+        $("#tableviewer thead th:last").detach();
+        var response = 99;
+        $("#tableviewer thead tr").append('<th><a id="d' + response + '" href="javascript:changedate(' + "'d" + response + "'" + ')">01.01</a></th><th><a href="javascript:adddate()" class="icon fa-plus"></a></th>"');
+        //Получить id строки
+        var rownum = 98;
+        $("#tableviewer tbody tr").append('<td><a id="m' + rownum + '_' + response + '" href="javascript:change(' + "'m" + rownum + '_' + response + ')" class="icon fa-times"></a></td>');
+
+        $.post('./table.php', {
+            type: 'ADDDATE',
+            idtable: $("#courseselector :selected").val()
+        }).done(function (response) {
+            //response должен вернут id даты
+            //alert(response);
+        }).fail(function () {
+            alert('No connection ')
+        });
+    }
+
+    function addstudent() {
+        var response = 99;
+        var rownum = 98;
+        $("#tableviewer tbody").append('<tr></tr>');
+        $("#tableviewer tbody tr:last").append('<td><a id="n' + response + '" href="javascript:changename(' + "'n" + response + "'" + ')">ФИО</a></td>');
+        if ($("#tableviewer tbody tr").length > 1) {
+            for (var i = $("#tableviewer tbody tr:first td").length - 2; i >= 0; i--) {
+                $("#tableviewer tbody tr:last").append('<td><a id="m' + rownum + '_' + response + '" href="javascript:change(' + "'m" + rownum + '_' + response + ')" class="icon fa-times"></a></td>');
+            }
+        }
+
+        $.post('./table.php', {
+            type: 'ADDSTUDENT',
+            idtable: $("#courseselector :selected").val()
+        }).done(function (response) {
+            //alert(response);
+        }).fail(function () {
+            alert('No connection ')
+        });
+    }
+
+    function change(source) {
+        if ($('#' + source).is('.fa-times')) {
+            $('#' + source).removeClass('fa-times').addClass('fa-check');
+        } else {
+            $('#' + source).removeClass('fa-check').addClass('fa-times');
+        }
+    }
+
+    function changename(source) {
+        var s2 = "'" + source + "'";
+        if (!$("#" + source).is('a')) {
+            var t = $("#newval" + source).val();
+            $.post('./table.php', {
+                type: 'CHANGENAME',
+                idtable: $("#courseselector :selected").val(),
+                id: source,
+                data: t
+            }).done(function (response) {
+                //alert(response);
+                $("#newval" + source).closest("td").html('<a id="' + source + '" href="javascript:changename(' + s2 + ')">' + t + '</a>');
+            }).fail(function () {
+                alert('No connection')
+            });
+        } else {
+            var t = $("#" + source).text();
+            $("#" + source).hide();
+            $("#" + source).closest("td").html('<input type="text" name="newval" id="newval' + source + '" value="" style="height: 2rem"><a href="javascript:changename(' + s2 + ')" class="button icon fa-check">Сохранить</a>');
+            $("#newval" + source).val(t);
+        }
+    }
+
+    function changedate(source) {
+        var s2 = "'" + source + "'";
+        if (!$("#" + source).is('a')) {
+            var t = $("#newval" + source).val();
+            $.post('./table.php', {
+                type: 'CHANGEDATE',
+                idtable: $("#courseselector :selected").val(),
+                id: source,
+                data: t
+            }).done(function (response) {
+                alert(response);
+                $("#newval" + source).closest("th").html('<a id="' + source + '" href="javascript:changedate(' + s2 + ')">' + t + '</a>');
+            }).fail(function () {
+                alert('No connection')
+            });
+        } else {
+            var t = $("#" + source).text();
+            $("#" + source).hide();
+            $("#" + source).closest("th").html('<input type="text" name="newval" id="newval' + source + '" value="" style="height: 2rem"><a href="javascript:changedate(' + s2 + ')" class="button icon fa-check">Сохранить</a>');
+            $("#newval" + source).val(t);
+        }
+    }
+
+    function showtable() {
+        $('#actions').show();
+        $('#tablehelp').empty();
+        $('#tableviewer').empty();
+        $('#tablehelp').text('Подгружаем таблицу...');
+        location.href = '#htable';
+        $.get('./table.php', {
+            idtable: $("#courseselector :selected").val(),
+            id: $("input[name='groupselector']:checked").attr("id")
+        }).done(function (response) {
+            $('#tablehelp').empty();
+            $('#tableviewer').html(response)
+        }).fail(function () {
+            $('#tablehelp').text('Нет соединения с сервером')
+        });
+    }
+</script>
+
+</body>
 </html>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Июл 02 2019 г., 15:04
+-- Время создания: Июл 02 2019 г., 18:52
 -- Версия сервера: 10.3.13-MariaDB
 -- Версия PHP: 7.1.22
 
@@ -41,8 +41,7 @@ CREATE TABLE `attendance` (
 --
 
 INSERT INTO `attendance` (`ID_ATT`, `ID_SUBJECT`, `ID_STUDENT`, `DATE_POS`, `MARK`) VALUES
-(1, 2, 1, '2019-07-01', 1),
-(2, 2, 4, '2019-07-01', 0);
+(1, 2, 1, '2019-07-01', 1);
 
 -- --------------------------------------------------------
 
@@ -62,7 +61,11 @@ CREATE TABLE `courses` (
 
 INSERT INTO `courses` (`ID_COURSE`, `COURSE_NAME`, `ID_GROUP`) VALUES
 (1, '1 курс', NULL),
-(2, '2 курс', NULL);
+(2, '2 курс', NULL),
+(3, '3 курс', NULL),
+(4, '4 курс', NULL),
+(5, '1 курс маг.', NULL),
+(6, '2 курс маг.', NULL);
 
 -- --------------------------------------------------------
 
@@ -83,9 +86,8 @@ CREATE TABLE `groups` (
 INSERT INTO `groups` (`ID_GROUP`, `GROUP_NAME`, `ID_COURSE`) VALUES
 (1, '1 группа', 1),
 (1, '1 группа', 2),
-(2, '2 группа', 1),
-(2, '2 группа', 2),
-(3, '3 группа', 1);
+(1, '1 группа', 5),
+(2, '2 группа', 2);
 
 -- --------------------------------------------------------
 
@@ -128,9 +130,7 @@ CREATE TABLE `students` (
 
 INSERT INTO `students` (`ID_STUDENT`, `FIO`, `ID_GROUP`, `ID_COURSE`) VALUES
 (1, 'Иванов А.А.', 1, 1),
-(2, 'Петров У.М', 1, 1),
-(3, 'Плякин У.К.', 2, 1),
-(4, 'Кобз П.К.', 2, 1);
+(2, 'Петров У.М', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -211,7 +211,7 @@ ALTER TABLE `permissions`
 -- Индексы таблицы `students`
 --
 ALTER TABLE `students`
-  ADD PRIMARY KEY (`ID_STUDENT`),
+  ADD PRIMARY KEY (`ID_STUDENT`,`ID_GROUP`,`ID_COURSE`),
   ADD KEY `ID_COURSE` (`ID_COURSE`),
   ADD KEY `ID_GROUP` (`ID_GROUP`);
 
@@ -272,21 +272,21 @@ ALTER TABLE `users`
 -- Ограничения внешнего ключа таблицы `attendance`
 --
 ALTER TABLE `attendance`
-  ADD CONSTRAINT `ATTENDANCE_ibfk_2` FOREIGN KEY (`ID_SUBJECT`) REFERENCES `subjects` (`ID_SUBJECT`),
-  ADD CONSTRAINT `ATTENDANCE_ibfk_3` FOREIGN KEY (`ID_STUDENT`) REFERENCES `students` (`ID_STUDENT`);
+  ADD CONSTRAINT `ATTENDANCE_ibfk_2` FOREIGN KEY (`ID_SUBJECT`) REFERENCES `subjects` (`ID_SUBJECT`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ATTENDANCE_ibfk_3` FOREIGN KEY (`ID_STUDENT`) REFERENCES `students` (`ID_STUDENT`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `groups`
 --
 ALTER TABLE `groups`
-  ADD CONSTRAINT `GROUPS_ibfk_1` FOREIGN KEY (`ID_COURSE`) REFERENCES `courses` (`ID_COURSE`);
+  ADD CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`ID_COURSE`) REFERENCES `courses` (`ID_COURSE`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `students`
 --
 ALTER TABLE `students`
-  ADD CONSTRAINT `STUDENTS_ibfk_1` FOREIGN KEY (`ID_COURSE`) REFERENCES `courses` (`ID_COURSE`),
-  ADD CONSTRAINT `STUDENTS_ibfk_2` FOREIGN KEY (`ID_GROUP`) REFERENCES `groups` (`ID_GROUP`);
+  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`ID_COURSE`) REFERENCES `courses` (`ID_COURSE`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `students_ibfk_2` FOREIGN KEY (`ID_GROUP`) REFERENCES `groups` (`ID_GROUP`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `users`
