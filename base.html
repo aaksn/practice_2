@@ -36,6 +36,9 @@
 										<option value="5">1 маг.</option>
 										<option value="6">2 маг.</option>
 									</select> курс</h2>
+									<p><select name="subjectselector" id="subjectselector" class="select">
+									</select></p>
+									
 									<div id="courses"></div>
 									
 									<li>
@@ -140,9 +143,16 @@
 
 				        var e = $("#courseselector :selected").val();
 						$.get('./filelist.php', {
-					        id: e
+					        course: e
 					    }).done(function(response) {
-					        $('#courses').html(response)
+					        $('#subjectselector').html(response);
+					        $.get('./filelist.php', {
+    					        id: e
+    					    }).done(function(response) {
+    					        $('#courses').html(response)
+    					    }).fail(function() {
+    					        $('#courses').text('Не удалось подключиться к серверу')
+    					    });
 					    }).fail(function() {
 					        $('#courses').text('Не удалось подключиться к серверу')
 					    });

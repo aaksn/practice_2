@@ -3,6 +3,19 @@ $host = 'localhost';
 $database = 'db'; // имя базы данных
 $user = 'root'; // имя пользователя
 $password = ''; // пароль
+
+//Отображение списка предметов
+if (!empty($_GET["course"])) {
+	//$id = $_GET["id"] - 1;
+	//echo " Data id:".$_GET["id"]."" ;
+	$course = $_GET["course"];
+
+	//Пример
+	$subjects = [1 => "Урмат", 2 => "Практика Сыча", 3 => "Творог"];
+	foreach ($subjects as $key => $value) {
+		echo '<option value="'.$key.'">'.$value.'</option>';
+	};        
+};
 //Отображение списка таблиц
 if (!empty($_GET["id"])) {
     //$id = $_GET["id"] - 1;
@@ -28,7 +41,7 @@ if (!empty($_GET["id"])) {
 
         //Выводим результат
         foreach ($course as $key => $value) {
-            echo '<li id='.$key.'f"><input type="radio" id="'.$key.'" name="groupselector" /><label for="'.$key.'">'.$value.'</label><a href="javascript:editpos('.$key.');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos('.$key.');" class="button primary small icon fa-trash">Удалить</a></li>';
+            echo '<li id='.$key.'f><input type="radio" id="'.$key.'" name="groupselector" /><label for="'.$key.'">'.$value.'</label><a href="javascript:editpos('.$key.');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos('.$key.');" class="button primary small icon fa-trash">Удалить</a></li>';
 
             // очищаем результат
             //mysqli_free_result($result);
