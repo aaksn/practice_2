@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Июл 02 2019 г., 20:26
+-- Время создания: Июл 02 2019 г., 22:17
 -- Версия сервера: 10.3.13-MariaDB
 -- Версия PHP: 7.1.22
 
@@ -35,13 +35,6 @@ CREATE TABLE `attendance` (
   `DATE_POS` date NOT NULL,
   `MARK` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Дамп данных таблицы `attendance`
---
-
-INSERT INTO `attendance` (`ID_ATT`, `ID_SUBJECT`, `ID_STUDENT`, `DATE_POS`, `MARK`) VALUES
-(1, 2, 1, '2019-07-01', 1);
 
 -- --------------------------------------------------------
 
@@ -85,10 +78,13 @@ CREATE TABLE `groups` (
 --
 
 INSERT INTO `groups` (`ID_GROUP`, `GROUP_NAME`, `ID_COURSE`, `ID_SUBJECT`) VALUES
-(1, '1 группа', 1, 0),
-(1, '1 группа', 2, 0),
-(1, '1 группа', 5, 0),
-(2, '2 группа', 2, 0);
+(1, '1 группа', 1, 2),
+(1, '1 группа', 2, 1),
+(1, '1 группа', 5, 4),
+(2, '2 группа', 1, 2),
+(2, '2 группа', 2, 0),
+(3, '3 группа', 1, 2),
+(4, '4 группа', 1, 4);
 
 -- --------------------------------------------------------
 
@@ -125,14 +121,6 @@ CREATE TABLE `students` (
   `ID_COURSE` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Дамп данных таблицы `students`
---
-
-INSERT INTO `students` (`ID_STUDENT`, `FIO`, `ID_GROUP`, `ID_COURSE`) VALUES
-(1, 'Иванов А.А.', 1, 1),
-(2, 'Петров У.М', 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -151,7 +139,9 @@ CREATE TABLE `subjects` (
 
 INSERT INTO `subjects` (`ID_SUBJECT`, `SUBJECT_NAME`, `ID_COURSE`) VALUES
 (1, 'УрМат', 2),
-(2, 'ТИПИС', 1);
+(2, 'ТИПИС', 1),
+(3, 'Метывычеты', 1),
+(4, 'ФК', 1);
 
 -- --------------------------------------------------------
 
@@ -198,7 +188,7 @@ ALTER TABLE `courses`
 -- Индексы таблицы `groups`
 --
 ALTER TABLE `groups`
-  ADD PRIMARY KEY (`ID_GROUP`,`ID_COURSE`),
+  ADD PRIMARY KEY (`ID_GROUP`,`ID_COURSE`,`ID_SUBJECT`),
   ADD KEY `GROUPS_ibfk_1` (`ID_COURSE`),
   ADD KEY `ID_SUBJECT` (`ID_SUBJECT`);
 
@@ -260,7 +250,7 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT для таблицы `subjects`
 --
 ALTER TABLE `subjects`
-  MODIFY `ID_SUBJECT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_SUBJECT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
