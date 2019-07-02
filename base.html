@@ -168,13 +168,20 @@
 
     document.getElementById("courseselector").onchange = function changecourse() {
         var e = $("#courseselector :selected").val();
+        var s = $("#subjectselector :selected").val();
         $.get('./filelist.php', {
-            id: e
+            course: e
         }).done(function (response) {
-
-            $('#courses').html(response)
+            $('#subjectselector').html(response);
+            $.get('./filelist.php', {
+                id: e
+            }).done(function (response) {
+                $('#courses').html(response)
+            }).fail(function () {
+                $('#courses').text('Не удалось подключиться к серверу')
+            });
         }).fail(function () {
-            $('#courses').text('Unable to show')
+            $('#courses').text('Не удалось подключиться к серверу')
         });
     }
 
