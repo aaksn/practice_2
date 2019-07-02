@@ -182,7 +182,7 @@
             $('#courses').text('Не удалось подключиться к серверу')
         });
     }
-    
+
     document.getElementById("subjectselector").onchange = function changecourse() {        
         $.get('./filelist.php', {
                 courseid: $("#courseselector :selected").val(),
@@ -214,7 +214,9 @@
             courseid: $("#courseselector :selected").val(),
             subjectid: $("#subjectselector :selected").val()
         }).done(function (response) {
-            $('#courses').append('<li id="' + response + 'f"><input type="radio" id="' + response + '" name="groupselector" /><label for="' + response + '">' + response + ' группа</label><a href="javascript:editpos(' + response + ');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos(' + response + ');" class="button primary small icon fa-trash">Удалить</a></li>');
+        	if (response != '') {
+        		$('#courses').append('<li id="' + response + 'f"><input type="radio" id="' + response + '" name="groupselector" /><label for="' + response + '">' + response + ' группа</label><a href="javascript:editpos(' + response + ');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos(' + response + ');" class="button primary small icon fa-trash">Удалить</a></li>');
+        	}            
         }).fail(function () {
             alert('No connection ')
         });
