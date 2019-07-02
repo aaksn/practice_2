@@ -147,17 +147,15 @@
     $(document).ready(
         function () {
             $('#actions').hide();
-
-            var e = $("#courseselector :selected").val();
-            var s = $("#subjectselector :selected").val();
             
+            var e = $("#courseselector :selected").val();
             $.get('./filelist.php', {
                 course: e
             }).done(function (response) {
                 $('#subjectselector').html(response);
                 $.get('./filelist.php', {
                     courseid: e,
-                	subjectid: s
+                	subjectid: $("#subjectselector :selected").val()
                 }).done(function (response) {
                     $('#courses').html(response)
                 }).fail(function () {
@@ -191,8 +189,9 @@
     function deletepos(source) {
         $.post('./filelist.php', {
             type: 'DEL',
-            id: source,
-            idtable: $("#courseselector :selected").val()
+            groupid: source,
+            courseid: $("#courseselector :selected").val(),
+            subjectid: $("#subjectselector :selected").val()
         }).done(function (response) {
             $('#' + source + 'f').detach();
         }).fail(function () {
@@ -203,7 +202,9 @@
     function addpos(source) {
         $.post('./filelist.php', {
             type: 'ADD',
-            idtable: $("#courseselector :selected").val()
+            groupid: source,
+            courseid: $("#courseselector :selected").val(),
+            subjectid: $("#subjectselector :selected").val()
         }).done(function (response) {
             $('#courses').append('<li id="' + response + 'f"><input type="radio" id="' + response + '" name="groupselector" /><label for="' + response + '">' + response + ' группа</label><a href="javascript:editpos(' + response + ');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos(' + response + ');" class="button primary small icon fa-trash">Удалить</a></li>');
         }).fail(function () {
@@ -215,8 +216,9 @@
         if ($("#" + source + "f").children("a:first").text() == 'OK') {
             $.post('./filelist.php', {
                 type: 'EDIT',
-                idtable: $("#courseselector :selected").val(),
-                id: source,
+                groupid: source,
+	            courseid: $("#courseselector :selected").val(),
+	            subjectid: $("#subjectselector :selected").val(),
                 data: $("#newval" + source).val()
             }).done(function (response) {
                 $("#" + source + "f").children("a:first").text('Изменить').removeClass('fa-check-square-o').addClass('fa-pencil-square-o');
