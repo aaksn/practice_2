@@ -64,6 +64,7 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"])) {
 //Редактирование списка таблиц
 if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subjectid"])) {
 	$courseid = $_POST["courseid"];
+    $groupid = $_POST["groupid"];
     $subjectid = $_POST["subjectid"];
     if ($_POST["type"] == "ADD") {
         // подключаемся к серверу
@@ -79,12 +80,12 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
     }
     if ($_POST["type"] == 'DEL' && !empty($_POST["groupid"])) {
         $groupid = $_POST["groupid"];
-        
+        $subjectid = $_POST["subjectid"];
         // подключаемся к серверу
         $link = mysqli_connect($host, $user, $password, $database)
         or die("Ошибка " . mysqli_error($link));
         // выполняем операции с базой данных
-        mysqli_query($link, "DELETE FROM groups WHERE ID_GROUP=$groupid AND ID_COURSE=$courseid") or die("Ошибка " . mysqli_error($link));
+        mysqli_query($link, "DELETE FROM groups WHERE ID_GROUP=$groupid AND ID_COURSE=$courseid AND ID_SUBJECT=$subjectid") or die("Ошибка " . mysqli_error($link));
         // закрываем подключение
         mysqli_close($link);
 
