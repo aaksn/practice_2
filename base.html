@@ -182,6 +182,17 @@
             $('#courses').text('Не удалось подключиться к серверу')
         });
     }
+    
+    document.getElementById("subjectselector").onchange = function changecourse() {        
+        $.get('./filelist.php', {
+                courseid: $("#courseselector :selected").val(),
+                subjectid: $("#subjectselector :selected").val()
+            }).done(function (response) {
+                $('#courses').html(response)
+            }).fail(function () {
+                $('#courses').text('Не удалось подключиться к серверу')
+            });
+    }
 
     function deletepos(source) {
         $.post('./filelist.php', {
