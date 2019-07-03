@@ -10,10 +10,10 @@ $link = mysqli_connect($host, $user, $password, $database);
 
 if (isset($_COOKIE['id']) and isset($_COOKIE['hash']))
 {
-    $query = mysqli_query($link, "SELECT * FROM users WHERE user_id = '".intval($_COOKIE['id'])."' LIMIT 1");
+    $query = mysqli_query($link, "SELECT * FROM users WHERE ID_USER = ".intval($_COOKIE['id']));
     $userdata = mysqli_fetch_assoc($query);
 
-    if(($userdata['user_hash'] !== $_COOKIE['hash']) or ($userdata['user_id'] !== $_COOKIE['id']))
+    if(($userdata['HASH'] !== $_COOKIE['hash']) or ($userdata['ID_USER'] !== $_COOKIE['id']))
     {
         setcookie("id", "", time() - 3600*24*30*12, "/");
         setcookie("hash", "", time() - 3600*24*30*12, "/");

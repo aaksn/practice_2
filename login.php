@@ -22,20 +22,20 @@ $link = mysqli_connect($host, $user, $password, $database);
 if(isset($_POST['submit']))
 {
     // Вытаскиваем из БД запись, у которой логин равняеться введенному
-    $query = mysqli_query($link,"SELECT user_id, user_password FROM users WHERE user_login='".mysqli_real_escape_string($link,$_POST['login'])."' LIMIT 1");
+    $query = mysqli_query($link,"SELECT ID_USER, PASSWORD FROM users WHERE USERNAME=$_POST['login']");
     $data = mysqli_fetch_assoc($query);
 
     // Сравниваем пароли
-    if($data['user_password'] === md5(md5($_POST['password'])))
+    if($data['PASSWORD'] === md5(md5($_POST['password'])))
     {
         // Генерируем случайное число и шифруем его
         $hash = md5(generateCode(10));
 
         // Записываем в БД новый хеш авторизации
-        mysqli_query($link, "UPDATE users SET user_hash=$hash WHERE user_id=$data['user_id']");
+        mysqli_query($link, "UPDATE users SET HASH=$hash WHERE ID_USER=$data['ID_USER']");
 
         // Ставим куки
-        setcookie("id", $data['user_id'], time()+60*60*24*30);
+        setcookie("id", $data['ID_USER'], time()+60*60*24*30);
         setcookie("hash", $hash, time()+60*60*24*30,null,null,null,true); // httponly !!!
 
         // Переадресовываем браузер на страницу проверки нашего скрипта
@@ -46,6 +46,40 @@ if(isset($_POST['submit']))
         print "Вы ввели неправильный логин/пароль";
     }
 }
+
+//изменение пароля
+if(isset($_POST['repass']))
+{
+    // Вытаскиваем из БД запись, у которой логин равняеться введенному
+    //------------------------------------------------------|
+    //ТУТ ХЗ КАК ПОЛУЧИТЬ ЛОГИН, КОТОРЫЙ УЖЕ ВВЕЛИ РАНЬШЕ   |
+    //------------------------------------------------------|
+    $query = mysqli_query($link,"SELECT ID_USER, PASSWORD FROM users WHERE USERNAME=$_POST['login']");
+    $data = mysqli_fetch_assoc($query);
+
+    // Сравниваем пароли
+    if($data['PASSWORD'] === md5(md5($_POST['password'])))
+    {
+        // Генерируем случайное число и шифруем его
+        $hash = md5(generateCode(10));
+        $newpasswod=md5(md5(trim($_POST["newpassword"])));
+
+        // Записываем в БД новый хеш авторизации
+        mysqli_query($link, "UPDATE users SET HASH=$hash AND PASSWORD=$newpasswod WHERE ID_USER=$data['ID_USER']");
+
+        // Ставим куки
+        setcookie("id", $data['ID_USER'], time()+60*60*24*30);
+        setcookie("hash", $hash, time()+60*60*24*30,null,null,null,true); // httponly !!!
+
+        // Переадресовываем браузер на страницу проверки нашего скрипта
+        header("Location: check.php"); exit();
+    }
+    else
+    {
+        print "Вы ввели неправильный логин/пароль";
+    }
+}
+
 ?>
 <form method="POST">
     Логин <input name="login" type="text" required><br>
