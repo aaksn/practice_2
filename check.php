@@ -1,16 +1,16 @@
-<?
-// Скрипт проверки
+<?php
+// Скрипт проверки кук
 $host = 'localhost';
 $database = 'db'; // имя базы данных
 $user = 'root'; // имя пользователя
 $password = ''; // пароль
 
-// Соединямся с БД
-$link = mysqli_connect($host, $user, $password, $database);
-
 if (isset($_COOKIE['id']) and isset($_COOKIE['hash']))
-{
-    $query = mysqli_query($link, "SELECT * FROM users WHERE ID_USER = ".intval($_COOKIE['id']));
+{    
+    // Соединямся с БД
+    $link = mysqli_connect($host, $user, $password, $database);
+
+    $query = mysqli_query($link, "SELECT ID_USER, HASH, USERNAME FROM users WHERE ID_USER = ".intval($_COOKIE['id']));
     $userdata = mysqli_fetch_assoc($query);
 
     if(($userdata['HASH'] !== $_COOKIE['hash']) or ($userdata['ID_USER'] !== $_COOKIE['id']))
@@ -21,8 +21,9 @@ if (isset($_COOKIE['id']) and isset($_COOKIE['hash']))
     }
     else
     {
-        print "Привет, ".$userdata['user_login'].". Всё работает!";
+        print "Привет, ".$userdata['USERNAME'].". Всё работает!";
     }
+    mysqli_close($link);
 }
 else
 {

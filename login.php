@@ -1,4 +1,4 @@
-<?
+<?php
 // Страница авторизации
 $host = 'localhost';
 $database = 'db'; // имя базы данных
@@ -17,12 +17,12 @@ function generateCode($length=6) {
 }
 
 // Соединямся с БД
-$link = mysqli_connect($host, $user, $password, $database);
+$link = mysqli_connect($host, $user, $password, $database) or die("Ошибка " . mysqli_error($link));
 
 if(isset($_POST['submit']))
 {
     // Вытаскиваем из БД запись, у которой логин равняеться введенному
-    $query = mysqli_query($link,"SELECT ID_USER, PASSWORD FROM users WHERE USERNAME=$_POST['login']");
+    $query = mysqli_query($link, "SELECT ID_USER, PASSWORD FROM users WHERE USERNAME='".mysqli_real_escape_string($link, $_POST['login'])."'");
     $data = mysqli_fetch_assoc($query);
 
     // Сравниваем пароли
@@ -32,8 +32,9 @@ if(isset($_POST['submit']))
         $hash = md5(generateCode(10));
 
         // Записываем в БД новый хеш авторизации
-        mysqli_query($link, "UPDATE users SET HASH=$hash WHERE ID_USER=$data['ID_USER']");
-
+        $iduser = $data['ID_USER'];
+        mysqli_query($link, "UPDATE `users` SET `HASH` = '$hash' WHERE `users`.`ID_USER` = $iduser");
+        print $iduser;
         // Ставим куки
         setcookie("id", $data['ID_USER'], time()+60*60*24*30);
         setcookie("hash", $hash, time()+60*60*24*30,null,null,null,true); // httponly !!!
@@ -54,7 +55,8 @@ if(isset($_POST['repass']))
     //------------------------------------------------------|
     //ТУТ ХЗ КАК ПОЛУЧИТЬ ЛОГИН, КОТОРЫЙ УЖЕ ВВЕЛИ РАНЬШЕ   |
     //------------------------------------------------------|
-    $query = mysqli_query($link,"SELECT ID_USER, PASSWORD FROM users WHERE USERNAME=$_POST['login']");
+    $lp = $_POST['login'];
+    $query = mysqli_query($link,"SELECT ID_USER, PASSWORD FROM users WHERE USERNAME=$lp");
     $data = mysqli_fetch_assoc($query);
 
     // Сравниваем пароли
@@ -62,10 +64,11 @@ if(isset($_POST['repass']))
     {
         // Генерируем случайное число и шифруем его
         $hash = md5(generateCode(10));
-        $newpasswod=md5(md5(trim($_POST["newpassword"])));
+        $newpasswod = md5(md5(trim($_POST["newpassword"])));
 
         // Записываем в БД новый хеш авторизации
-        mysqli_query($link, "UPDATE users SET HASH=$hash AND PASSWORD=$newpasswod WHERE ID_USER=$data['ID_USER']");
+        $id = $data['ID_USER'];
+        mysqli_query($link, "UPDATE users SET HASH=$hash AND PASSWORD=$newpasswod WHERE ID_USER=$id");
 
         // Ставим куки
         setcookie("id", $data['ID_USER'], time()+60*60*24*30);
@@ -79,6 +82,8 @@ if(isset($_POST['repass']))
         print "Вы ввели неправильный логин/пароль";
     }
 }
+
+mysqli_close($link);
 
 ?>
 <form method="POST">

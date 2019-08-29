@@ -64,7 +64,7 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"])) {
 //Редактирование списка таблиц
 if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subjectid"])) {
 	$courseid = $_POST["courseid"];
-    $groupid = $_POST["groupid"];
+    
     $subjectid = $_POST["subjectid"];
     if ($_POST["type"] == "ADD") {
         // подключаемся к серверу
@@ -91,7 +91,7 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
 
         echo "Deleted";
     }
-    if ($_POST["type"] == 'EDIT' && !empty($_POST["data"])) {
+    if ($_POST["type"] == 'EDIT' && !empty($_POST["data"]) && !empty($_POST["groupid"])) {
         $groupid = $_POST["groupid"];
         $data = $_POST["data"];
         

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
--- Хост: 127.0.0.1:3306
--- Время создания: Июл 02 2019 г., 22:17
--- Версия сервера: 10.3.13-MariaDB
--- Версия PHP: 7.1.22
+-- Хост: localhost:3306
+-- Время создания: Авг 29 2019 г., 19:23
+-- Версия сервера: 5.7.24-0ubuntu0.18.04.1
+-- Версия PHP: 7.2.12-1+ubuntu18.04.1+deb.sury.org+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -33,7 +33,7 @@ CREATE TABLE `attendance` (
   `ID_SUBJECT` int(11) NOT NULL,
   `ID_STUDENT` int(11) NOT NULL,
   `DATE_POS` date NOT NULL,
-  `MARK` tinyint(1) NOT NULL DEFAULT 0
+  `MARK` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -84,7 +84,9 @@ INSERT INTO `groups` (`ID_GROUP`, `GROUP_NAME`, `ID_COURSE`, `ID_SUBJECT`) VALUE
 (2, '2 группа', 1, 2),
 (2, '2 группа', 2, 0),
 (3, '3 группа', 1, 2),
-(4, '4 группа', 1, 4);
+(4, '4 группа', 1, 2),
+(4, '4 группа', 1, 4),
+(5, '5 группа', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -152,19 +154,23 @@ INSERT INTO `subjects` (`ID_SUBJECT`, `SUBJECT_NAME`, `ID_COURSE`) VALUES
 CREATE TABLE `users` (
   `ID_USER` tinyint(2) UNSIGNED NOT NULL,
   `USERNAME` varchar(15) NOT NULL,
-  `PASSWORD` varchar(15) NOT NULL,
-  `RANK` int(11) NOT NULL
+  `PASSWORD` varchar(32) NOT NULL,
+  `RANK` int(11) NOT NULL,
+  `HASH` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `users`
 --
 
-INSERT INTO `users` (`ID_USER`, `USERNAME`, `PASSWORD`, `RANK`) VALUES
-(2, 'root', 'root', 777),
-(3, 'teacher', 'teacher', 222),
-(4, 'moderator', 'moderator', 666),
-(5, 'user', 'user', 111);
+INSERT INTO `users` (`ID_USER`, `USERNAME`, `PASSWORD`, `RANK`, `HASH`) VALUES
+(2, 'root', 'root', 777, ''),
+(3, 'teacher', 'teacher', 222, ''),
+(4, 'moderator', 'moderator', 666, ''),
+(5, 'user', 'user', 111, ''),
+(6, 'first', '1fbf04ad51bd056831bad3b1f685aff7', 666, ''),
+(7, 'rusik', '20b29fe263143860f94565d0092645d7', 666, ''),
+(8, 'test', 'fb469d7ef430b0baf0cab6c436e70375', 666, '30ccd4fac47acd1e010d5bcb7a4806ec');
 
 --
 -- Индексы сохранённых таблиц
@@ -232,7 +238,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `ID_ATT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_ATT` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `permissions`
@@ -244,7 +250,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT для таблицы `students`
 --
 ALTER TABLE `students`
-  MODIFY `ID_STUDENT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID_STUDENT` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `subjects`
@@ -256,7 +262,7 @@ ALTER TABLE `subjects`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID_USER` tinyint(2) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID_USER` tinyint(2) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
@@ -268,32 +274,6 @@ ALTER TABLE `users`
 ALTER TABLE `attendance`
   ADD CONSTRAINT `ATTENDANCE_ibfk_2` FOREIGN KEY (`ID_SUBJECT`) REFERENCES `subjects` (`ID_SUBJECT`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `ATTENDANCE_ibfk_3` FOREIGN KEY (`ID_STUDENT`) REFERENCES `students` (`ID_STUDENT`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Ограничения внешнего ключа таблицы `groups`
---
-ALTER TABLE `groups`
-  ADD CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`ID_COURSE`) REFERENCES `courses` (`ID_COURSE`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `groups_ibfk_2` FOREIGN KEY (`ID_SUBJECT`) REFERENCES `subjects` (`ID_SUBJECT`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Ограничения внешнего ключа таблицы `students`
---
-ALTER TABLE `students`
-  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`ID_COURSE`) REFERENCES `courses` (`ID_COURSE`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `students_ibfk_2` FOREIGN KEY (`ID_GROUP`) REFERENCES `groups` (`ID_GROUP`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Ограничения внешнего ключа таблицы `subjects`
---
-ALTER TABLE `subjects`
-  ADD CONSTRAINT `subjects_ibfk_1` FOREIGN KEY (`ID_COURSE`) REFERENCES `courses` (`ID_COURSE`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Ограничения внешнего ключа таблицы `users`
---
-ALTER TABLE `users`
-  ADD CONSTRAINT `USERS_ibfk_1` FOREIGN KEY (`RANK`) REFERENCES `permissions` (`RANK`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
