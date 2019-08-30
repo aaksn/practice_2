@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Хост: localhost:3306
--- Время создания: Авг 29 2019 г., 19:23
--- Версия сервера: 5.7.24-0ubuntu0.18.04.1
--- Версия PHP: 7.2.12-1+ubuntu18.04.1+deb.sury.org+1
+-- Хост: 127.0.0.1:3306
+-- Время создания: Авг 30 2019 г., 14:42
+-- Версия сервера: 10.3.13-MariaDB
+-- Версия PHP: 7.1.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -33,7 +33,7 @@ CREATE TABLE `attendance` (
   `ID_SUBJECT` int(11) NOT NULL,
   `ID_STUDENT` int(11) NOT NULL,
   `DATE_POS` date NOT NULL,
-  `MARK` tinyint(1) NOT NULL DEFAULT '0'
+  `MARK` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -79,7 +79,10 @@ CREATE TABLE `groups` (
 
 INSERT INTO `groups` (`ID_GROUP`, `GROUP_NAME`, `ID_COURSE`, `ID_SUBJECT`) VALUES
 (1, '1 группа', 1, 2),
+(1, '1 группа', 1, 3),
 (1, '1 группа', 2, 1),
+(1, '1 группа', 3, 0),
+(1, '1 группа', 4, 0),
 (1, '1 группа', 5, 4),
 (2, '2 группа', 1, 2),
 (2, '2 группа', 2, 0),
@@ -122,6 +125,17 @@ CREATE TABLE `students` (
   `ID_GROUP` int(11) NOT NULL,
   `ID_COURSE` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `students`
+--
+
+INSERT INTO `students` (`ID_STUDENT`, `FIO`, `ID_GROUP`, `ID_COURSE`) VALUES
+(1, 'Сидоров Иван Иванович', 1, 1),
+(2, 'Сидоров Иван Иванович 2к', 1, 2),
+(3, 'Сидоров Иван Иванович 3к', 1, 3),
+(4, 'Сидоров Иван Иванович 4к', 1, 4),
+(5, 'Иванов Иван Иванович', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -170,7 +184,7 @@ INSERT INTO `users` (`ID_USER`, `USERNAME`, `PASSWORD`, `RANK`, `HASH`) VALUES
 (5, 'user', 'user', 111, ''),
 (6, 'first', '1fbf04ad51bd056831bad3b1f685aff7', 666, ''),
 (7, 'rusik', '20b29fe263143860f94565d0092645d7', 666, ''),
-(8, 'test', 'fb469d7ef430b0baf0cab6c436e70375', 666, '30ccd4fac47acd1e010d5bcb7a4806ec');
+(8, 'test', 'fb469d7ef430b0baf0cab6c436e70375', 666, '6dc31230c7d24cf54f91ea68629e3abb');
 
 --
 -- Индексы сохранённых таблиц
@@ -238,7 +252,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `ID_ATT` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_ATT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT для таблицы `permissions`
@@ -250,7 +264,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT для таблицы `students`
 --
 ALTER TABLE `students`
-  MODIFY `ID_STUDENT` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_STUDENT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `subjects`
