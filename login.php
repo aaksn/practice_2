@@ -34,7 +34,7 @@ if(isset($_POST['submit']))
         // Записываем в БД новый хеш авторизации
         $iduser = $data['ID_USER'];
         mysqli_query($link, "UPDATE `users` SET `HASH` = '$hash' WHERE `users`.`ID_USER` = $iduser");
-        print $iduser;
+        //print $iduser;
         // Ставим куки
         $time = time()+60*60*24*30; // 30 дней
         if (isset($_POST['not_attach_ip'])) {
@@ -51,11 +51,11 @@ if(isset($_POST['submit']))
     else
     {
         print '<script>alert( "Вы ввели неправильный логин/пароль"); window.location.replace("login.html");</script>';
-        //header("Location: login.html"); exit();
+        header("Location: login.html"); exit();
     }
 }
 
-// 
+// Выход
 if(!empty($_GET['logout']))
 {
     unset($_COOKIE['id']);

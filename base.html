@@ -361,8 +361,9 @@
         $('#tablehelp').text('Подгружаем таблицу...');
         location.href = '#htable';
         $.get('./table.php', {
-            idtable: $("#courseselector :selected").val(),
-            id: $("input[name='groupselector']:checked").attr("id")
+            courseid: $("#courseselector :selected").val(),
+            subjectid: $("#subjectselector :selected").val(),
+            groupid: $("input[name='groupselector']:checked").attr("id")
         }).done(function (response) {
             $('#tablehelp').empty();
             $('#tableviewer').html(response)

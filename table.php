@@ -9,10 +9,6 @@ if (!empty($_POST["courseid"]) && !empty($_POST["subjectid"]) && !empty($_POST["
     $courseid = $_POST["courseid"];
     $groupid = $_POST["groupid"];
     $subjectid = $_POST["subjectid"];
-}
-// idtable - course
-if (!empty($_GET["id"])) {
-    //echo " Data id:".$_GET["id"]."" ;
 
     $link = mysqli_connect($host, $user, $password, $database)
     or die("Ошибка " . mysqli_error($link));
