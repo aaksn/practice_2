@@ -171,6 +171,7 @@
                 if (response.length > 0) {
                     $('#prelogin').text('Вы вошли как ' + response);
                     $('#loginout').text('Выйти');
+                    $("#loginout").attr("href", "login.php?logout=true");
                 }
             }).fail(function () {
                 alert('Сервер авторизации недоступен')

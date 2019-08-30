@@ -55,6 +55,16 @@ if(isset($_POST['submit']))
     }
 }
 
+// 
+if(!empty($_GET['logout']))
+{
+    unset($_COOKIE['id']);
+    unset($_COOKIE['hash']);
+    setcookie("id", "", 1);
+    setcookie("hash", "", 1);
+    header("Location: base.html"); exit();
+}
+
 //изменение пароля
 if(isset($_POST['repass']))
 {
