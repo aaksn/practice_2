@@ -21,7 +21,7 @@ if (isset($_COOKIE['id']) and isset($_COOKIE['hash']))
     }
     else
     {
-        print "Привет, ".$userdata['USERNAME'].". Всё работает!";
+        print $userdata['USERNAME'];        
     }
     mysqli_close($link);
 }

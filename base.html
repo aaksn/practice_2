@@ -20,12 +20,12 @@
             class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
         <div class="content">
             <h1>Просмотр посещаемости</h1>
-            <p class="major">Выберите группу из списка и нажмите &quot;Начать просмотр&quot;. Для доступа к
+            <p class="major" id="prelogin">Выберите группу из списка и нажмите &quot;Начать просмотр&quot;. Для доступа к
                 редактированию нажмите &quot;Войти&quot;</p>
             <ul class="actions fit">
                 <li><a href="javascript:showtable();" class="button primary big wide smooth-scroll-middle">Начать
                     просмотр</a></li>
-                <li><a href="./login.html" class="button primary big wide smooth-scroll-middle">Войти</a></li>
+                <li><a href="./login.html" class="button primary big wide smooth-scroll-middle" id="loginout">Войти</a></li>
             </ul>
         </div>
         <div class="content">
@@ -148,6 +148,7 @@
         function () {
             $('#actions').hide();
             
+            //Список групп
             $.get('./filelist.php', {
                 course: $("#courseselector :selected").val()
             }).done(function (response) {
@@ -162,6 +163,17 @@
                 });
             }).fail(function () {
                 $('#courses').text('Не удалось подключиться к серверу')
+            });
+            //Логин пользователя
+            $.get('check.php', {
+                
+            }).done(function (response) {
+                if (response.length > 0) {
+                    $('#prelogin').text('Вы вошли как ' + response);
+                    $('#loginout').text('Выйти');
+                }
+            }).fail(function () {
+                alert('Сервер авторизации недоступен')
             });
         });
 

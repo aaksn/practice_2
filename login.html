@@ -16,19 +16,19 @@
 				<section class="banner onload-image-fade-in onload-content-fade-right style2 fullscreen orient-center content-align-center image-position-center -">
 						<div class="content">
 							<h2>Войти</h2>							
-							<form method="POST" action="">
+							<form method="POST" action="login.php">
 								<div class="fields" align="left">
 									<div class="field">
-										<label for="name">Логин</label>
-										<input type="text" name="login" id="login" value="">
+										<label for="login">Логин</label>
+										<input type="text" required name="login" id="login">
 									</div>
 									<div class="field">
-										<label for="email">Пароль</label>
-										<input type="password" name="password" id="password" value="">
+										<label for="password">Пароль</label>
+										<input type="password" required name="password" id="password" value="">
 									</div>									
 									<div class="field">
-										<input type="checkbox" id="copy" name="copy">
-										<label for="copy">Запомнить меня</label>
+										<input type="checkbox" id="c" name="not_attach_ip">
+										<label for="c">Не запоминать меня</label>
 									</div>
 								</div>
 								

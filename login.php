@@ -36,15 +36,22 @@ if(isset($_POST['submit']))
         mysqli_query($link, "UPDATE `users` SET `HASH` = '$hash' WHERE `users`.`ID_USER` = $iduser");
         print $iduser;
         // Ставим куки
-        setcookie("id", $data['ID_USER'], time()+60*60*24*30);
-        setcookie("hash", $hash, time()+60*60*24*30,null,null,null,true); // httponly !!!
+        $time = time()+60*60*24*30; // 30 дней
+        if (isset($_POST['not_attach_ip'])) {
+            // Если не нужно сохранять сессию
+            $time = 0;
+        }
+        
+        setcookie("id", $data['ID_USER'], $time);
+        setcookie("hash", $hash, $time,null,null,null,true); // httponly !!!
 
         // Переадресовываем браузер на страницу проверки нашего скрипта
-        header("Location: check.php"); exit();
+        header("Location: base.html"); exit();
     }
     else
     {
-        print "Вы ввели неправильный логин/пароль";
+        print '<script>alert( "Вы ввели неправильный логин/пароль"); window.location.replace("login.html");</script>';
+        //header("Location: login.html"); exit();
     }
 }
 
@@ -86,9 +93,3 @@ if(isset($_POST['repass']))
 mysqli_close($link);
 
 ?>
-<form method="POST">
-    Логин <input name="login" type="text" required><br>
-    Пароль <input name="password" type="password" required><br>
-    Не прикреплять к IP(не безопасно) <input type="checkbox" name="not_attach_ip"><br>
-    <input name="submit" type="submit" value="Войти">
-</form>
