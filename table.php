@@ -62,6 +62,12 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
     $groupid = $_POST["groupid"];
     $subjectid = $_POST["subjectid"];
 
+    //все предметы
+    $subjects = mysqli_fetch_row(mysqli_query($link, "SELECT DISTINCT ID_SUBJECT FROM groups WHERE ID_GROUP=$groupid AND ID_COURSE=$courseid)") or die("Ошибка " . mysqli_error($link)));
+    //все даты
+    $alldates = mysqli_fetch_row(mysqli_query($link, "SELECT DISTINCT DATE_POS as datee FROM attendance,students WHERE attendance.ID_STUDENT=students.ID_STUDENT and ID_GROUP=$groupid AND ID_COURSE=$courseid)") or die("Ошибка " . mysqli_error($link)));
+
+
     if ($_POST["type"] == 'ADDSTUDENT' && !empty($_POST["fio"])) {
         $fio = $_POST["fio"];
 
@@ -72,12 +78,12 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
         //ищем его id
         $qid = mysqli_query($link, "SELECT ID_STUDENT FROM students WHERE FIO=$fio AND ID_COURSE=$courseid AND ID_GROUP=$groupid") or die("Ошибка " . mysqli_error($link));
         $arr_studentid = mysqli_fetch_row($qid);
-        //ищем все даты его группы
-        $dates = mysqli_query($link, "SELECT DISTINCT DATE_POS as datee FROM attendance,students WHERE attendance.ID_STUDENT=students.ID_STUDENT and ID_GROUP=$groupid AND ID_COURSE=$courseid)") or die("Ошибка " . mysqli_error($link));
-        $arr_dates = mysqli_fetch_row($dates);
         //добавляем все даты в успеваемость
-        for ($i = 0; $i < mysqli_num_rows($dates); $i++) {
-            mysqli_query($link, "INSERT INTO attendance (`ID_SUBJECT`, `ID_STUDENT`, `DATE_POS`) VALUES ($subjectid,$arr_studentid[0],$arr_dates[$i])") or die("Ошибка " . mysqli_error($link));
+        for ($i = 0; $i < mysqli_num_rows($subjects); $i++) {
+            $dates = mysqli_fetch_row(mysqli_query($link, "SELECT DISTINCT DATE_POS as datee FROM attendance,students WHERE attendance.ID_STUDENT=students.ID_STUDENT and ID_GROUP=$groupid AND ID_COURSE=$courseid and ID_SUBJECT=$subjects[i])") or die("Ошибка " . mysqli_error($link)));
+            for ($j = 0; $j < mysqli_num_rows($dates); $j++) {
+                mysqli_query($link, "INSERT INTO attendance (`ID_SUBJECT`, `ID_STUDENT`, `DATE_POS`) VALUES ($subjects[i],$arr_studentid[0],$dates[$j])") or die("Ошибка " . mysqli_error($link));
+            }
         }
         // закрываем подключение
         mysqli_close($link);
