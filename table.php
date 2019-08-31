@@ -72,8 +72,8 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
         //ищем его id
         $qid = mysqli_query($link, "SELECT ID_STUDENT FROM students WHERE FIO=$fio AND ID_COURSE=$courseid AND ID_GROUP=$groupid") or die("Ошибка " . mysqli_error($link));
         $arr_studentid = mysqli_fetch_row($qid);
-        //ищем все даты его группы на этои предмете
-        $dates = mysqli_query($link, "SELECT DATE_POS as datee FROM attendance WHERE ID_STUDENT=(SELECT ID_STUDENT FROM attendance WHERE ID_GROUP=$groupid AND ID_COURSE=$courseid AND ID_SUBJECT=$subjectid) LIMIT 1") or die("Ошибка " . mysqli_error($link));
+        //ищем все даты его группы
+        $dates = mysqli_query($link, "SELECT DISTINCT DATE_POS as datee FROM attendance,students WHERE attendance.ID_STUDENT=students.ID_STUDENT and ID_GROUP=$groupid AND ID_COURSE=$courseid)") or die("Ошибка " . mysqli_error($link));
         $arr_dates = mysqli_fetch_row($dates);
         //добавляем все даты в успеваемость
         for ($i = 0; $i < mysqli_num_rows($dates); $i++) {
