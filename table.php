@@ -144,17 +144,11 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
         echo "Type: CHANGENAME Id is:" . $_POST["idtable"] . "";
     }
     if ($_POST["type"] == 'CHANGEDATE' && !empty($_POST["id"]) && !empty($_POST["data"])) {
-        $date_old=$_GET["date"];//старая дата
+        $id_date=$_GET["date"];//айди даты
         $date = $_POST["date"];
         $link = mysqli_connect($host, $user, $password, $database) or die("Ошибка " . mysqli_error($link));
         // выполняем операции с базой данных
-        //ищем всех сдуентов с данными группой, курсом, предметом
-        $students = mysqli_query($link, "SELECT students.ID_STUDENT FROM attendance,students WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_SUBJECT=$subjectid AND students.ID_GROUP=$groupid AND students.ID_COURSE=$courseid") or die("Ошибка " . mysqli_error($link));
-        $arr_student = mysqli_fetch_row($students);
-        //изменяем дату в успеваемости для всех студентов
-        for ($i = 0; $i < mysqli_num_rows($students); $i++) {
-            mysqli_query($link, "UPDATE attendance SET DATE_POS=$date WHERE DATE_POS=$date_old AND ID_STUDENT=$arr_student[$i] AND ID_COURSE=$courseid AND ID_GROUP=$groupid AND ID_SUBJECT=$subjectid") or die("Ошибка " . mysqli_error($link));
-        }
+        mysqli_query($link, "UPDATE dates SET DATE='$date' WHERE ID_DATE=$id_date") or die("Ошибка " . mysqli_error($link));
         // закрываем подключение
         mysqli_close($link);
 
