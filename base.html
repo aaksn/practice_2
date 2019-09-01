@@ -301,11 +301,31 @@
     }
 
     function change(source) {
-        if ($('#' + source).is('.fa-times')) {
+        /*if ($('#' + source).is('.fa-times')) {
             $('#' + source).removeClass('fa-times').addClass('fa-check');
         } else {
             $('#' + source).removeClass('fa-check').addClass('fa-times');
+        }*/
+        var t = 0; 
+        if ($('#' + source).is('.fa-times')) {
+            t = 1;
         }
+        $.post('./table.php', {
+            type: 'CHANGEMARK',
+            courseid: $("#courseselector :selected").val(),
+            subjectid: $("#subjectselector :selected").val(),
+            groupid: $("input[name='groupselector']:checked").attr("id"),
+            id: source.slice(1),
+            data: t
+        }).done(function (response) {
+            if ($('#' + source).is('.fa-times')) {
+                $('#' + source).removeClass('fa-times').addClass('fa-check');
+            } else {
+                $('#' + source).removeClass('fa-check').addClass('fa-times');
+            }
+        }).fail(function () {
+            alert('No connection')
+        });
     }
 
     function changename(source) {
@@ -314,11 +334,12 @@
             var t = $("#newval" + source).val();
             $.post('./table.php', {
                 type: 'CHANGENAME',
-                idtable: $("#courseselector :selected").val(),
-                id: source,
+                courseid: $("#courseselector :selected").val(),
+                subjectid: $("#subjectselector :selected").val(),
+                groupid: $("input[name='groupselector']:checked").attr("id"),
+                id: source.slice(1),
                 data: t
             }).done(function (response) {
-                //alert(response);
                 $("#newval" + source).closest("td").html('<a id="' + source + '" href="javascript:changename(' + s2 + ')">' + t + '</a>');
             }).fail(function () {
                 alert('No connection')
@@ -337,11 +358,12 @@
             var t = $("#newval" + source).val();
             $.post('./table.php', {
                 type: 'CHANGEDATE',
-                idtable: $("#courseselector :selected").val(),
-                id: source,
+                courseid: $("#courseselector :selected").val(),
+                subjectid: $("#subjectselector :selected").val(),
+                groupid: $("input[name='groupselector']:checked").attr("id"),
+                id: source.slice(1),
                 data: t
             }).done(function (response) {
-                alert(response);
                 $("#newval" + source).closest("th").html('<a id="' + source + '" href="javascript:changedate(' + s2 + ')">' + t + '</a>');
             }).fail(function () {
                 alert('No connection')

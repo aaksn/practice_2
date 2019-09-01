@@ -13,69 +13,41 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
     $link = mysqli_connect($host, $user, $password, $database)
     or die("Ошибка " . mysqli_error($link));
     //запрос успеваемости
-    $query = "SELECT students.FIO,dates.DATE,attendance.MARK FROM attendance,students,dates WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_DATE=dates.ID_DATE AND attendance.ID_SUBJECT=$subjectid AND students.ID_GROUP=$groupid AND students.ID_COURSE=$courseid";
-    //$result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+    $datequery = "SELECT DISTINCT dates.ID_DATE, dates.DATE FROM attendance,students,dates WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_DATE=dates.ID_DATE AND attendance.ID_SUBJECT=$subjectid AND students.ID_GROUP=$groupid AND students.ID_COURSE=$courseid";
+    $studentsquery = "SELECT DISTINCT students.ID_STUDENT, students.FIO FROM attendance,students WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_SUBJECT=$subjectid AND students.ID_GROUP=$groupid AND students.ID_COURSE=$courseid";
     
+    $dateresult = mysqli_query($link, $datequery) or die("Ошибка " . mysqli_error($link));
+    $studentsresult = mysqli_query($link, $studentsquery) or die("Ошибка " . mysqli_error($link));
+
+    $dates = []; // Массив для хранения дат
+    $rows = mysqli_num_rows($dateresult); // количество полученных строк
+
+    for ($i = 0; $i < $rows; ++$i) {
+        $row = mysqli_fetch_row($dateresult);
+        $dates[$row[0]] = $row[1];
+    };
+
+    $students = []; // Массив для хранения студентов
+    $rows2 = mysqli_num_rows($studentsresult); // количество полученных строк
+
+    for ($i = 0; $i < $rows2; ++$i) {
+        $row2 = mysqli_fetch_row($studentsresult);
+        $marksquery = "SELECT attendance.ID_ATT, attendance.MARK FROM attendance,students WHERE attendance.ID_STUDENT=$row2[0] AND students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_SUBJECT=$subjectid AND students.ID_GROUP=$groupid AND students.ID_COURSE=$courseid";
+        $marksresult = mysqli_query($link, $marksquery) or die("Ошибка " . mysqli_error($link));
+        $rows3 = mysqli_num_rows($marksresult); // количество полученных строк
+        $marks = [];
+        for ($j = 0; $j < $rows3; ++$j) {
+            $row3 = mysqli_fetch_row($marksresult);
+            $marks[$row3[0]] = $row3[1];            
+        };        
+        $students[] = array("id" => $row2[0], "name" => $row2[1], "marks" => $marks);
+    };
+
     echo json_encode(array(
-        "students" => array(
-            array(
-                "id" => 1,
-                "name" => "Petrov",
-                "marks" => array("1" => 0, "2" => 1)
-            ),
-            array(
-                "id" => 2,
-                "name" => "Sidorov",
-                "marks" => array("3" => 1, "4" => 1)
-            )
-        ),
-        "dates" => array(
-            1 => "date 1",
-            2 => "date 2"
-            ) 
+        "students" => $students,
+        "dates" => $dates 
     ));
-    exit;
-
-    /*
-    if ($result) {
-        $subjects = []; // Массив для хранения данных
-        $rows = mysqli_num_rows($result); // количество полученных строк
-
-        for ($i = 0; $i < $rows; ++$i) {
-            $row = mysqli_fetch_row($result);
-            $subjects[$row[0]] = $row[1];
-        };
-
-        //Пример
-        foreach ($subjects as $key => $value) {
-            echo '<option value="' . $key . '">' . $value . '</option>';
-        };
-
-        echo "" . count($t[2]) . "";
-        echo "<thead><tr><th>Имя</th>";
-        foreach ($t[1] as $key => $value) {
-            echo '<th><a id="d' . $key . '" href="javascript:changedate(';
-            echo "'d" . $key . "')";
-            echo '">' . $value . '</a></th>';
-        }
-        echo '<th><a href="javascript:adddate();" class="icon fa-plus"></a></th></tr></thead><tbody>';
-        $keys = array_keys($t[0]);
-        for ($i = 1; $i <= count($t[0]); $i++) {
-            echo '<tr><td><a id="n' . $keys[$i] . '" href="javascript:changename(';
-            echo "'n" . $keys[$i - 1] . "')";
-            echo '">' . $t[0][$i] . '</a></td>';
-            for ($j = 1; $j <= count($t[2][1]); $j++) {
-
-                echo '<<td><a id="m' . $keys[$i - 1] . '_' . $j . '" href="javascript:change(';
-                echo "'m" . $keys[$i - 1] . "_" . $j . "')";
-                echo '" class="icon fa-times"></a></td>';
-            }
-            echo "</tr>";
-        }
-        echo '</tbody><tfoot><tr><td><a href="javascript:addstudent();" class="icon fa-plus"> Добавить студента</a></td></tr></tfoot>';
-    } else {
-        echo "Выберите группу";
-    }*/
+    exit;    
 }
 
 //Редактирование таблицы
@@ -83,12 +55,12 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
     $courseid = $_POST["courseid"];
     $groupid = $_POST["groupid"];
     $subjectid = $_POST["subjectid"];
-
+    /*
     //все предметы
     $subjects = mysqli_fetch_row(mysqli_query($link, "SELECT DISTINCT ID_SUBJECT FROM groups WHERE ID_GROUP=$groupid AND ID_COURSE=$courseid)") or die("Ошибка " . mysqli_error($link)));
     //все даты
     $alldates = mysqli_fetch_row(mysqli_query($link, "SELECT DISTINCT DATE_POS as datee FROM attendance,students WHERE attendance.ID_STUDENT=students.ID_STUDENT and ID_GROUP=$groupid AND ID_COURSE=$courseid)") or die("Ошибка " . mysqli_error($link)));
-
+    */
 
     if ($_POST["type"] == 'ADDSTUDENT' && !empty($_POST["fio"])) {
         $fio = $_POST["fio"];
@@ -131,28 +103,39 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
 
         echo "Type: ADDSTUDENT Table id is:" . $_POST["idtable"] . "";
     }
-    if ($_POST["type"] == 'CHANGENAME' && !empty($_POST["fio"])) {
-        $fio_old = $_GET["fio"];//старые фио
-        $fio = $_POST["fio"];//новые фио
+    if ($_POST["type"] == 'CHANGENAME' && !empty($_POST["data"]) && !empty($_POST["id"])) {       
+        $fio = $_POST["data"];//новые фио
+        $id = $_POST["id"];
         $link = mysqli_connect($host, $user, $password, $database)
         or die("Ошибка " . mysqli_error($link));
         // выполняем операции с базой данных
-        mysqli_query($link, "UPDATE students SET FIO=$fio WHERE FIO=$fio_old AND ID_COURSE=$courseid AND ID_GROUP=$groupid") or die("Ошибка " . mysqli_error($link));
+        mysqli_query($link, "UPDATE students SET FIO='$fio' WHERE ID_STUDENT=$id AND ID_COURSE=$courseid AND ID_GROUP=$groupid") or die("Ошибка " . mysqli_error($link));
         // закрываем подключение
         mysqli_close($link);
 
-        echo "Type: CHANGENAME Id is:" . $_POST["idtable"] . "";
+        echo "Type: CHANGENAME";
     }
     if ($_POST["type"] == 'CHANGEDATE' && !empty($_POST["id"]) && !empty($_POST["data"])) {
-        $id_date=$_GET["date"];//айди даты
-        $date = $_POST["date"];
+        $id_date = $_POST["id"];//айди даты
+        $data = $_POST["data"];
         $link = mysqli_connect($host, $user, $password, $database) or die("Ошибка " . mysqli_error($link));
         // выполняем операции с базой данных
-        mysqli_query($link, "UPDATE dates SET DATE='$date' WHERE ID_DATE=$id_date") or die("Ошибка " . mysqli_error($link));
+        mysqli_query($link, "UPDATE dates SET DATE='$data' WHERE ID_DATE=$id_date") or die("Ошибка " . mysqli_error($link));
         // закрываем подключение
         mysqli_close($link);
 
-        echo "Type: CHANGEDATE Id is:" . $_POST["idtable"] . "";
+        echo "Type: CHANGEDATE";
+    }
+    if ($_POST["type"] == 'CHANGEMARK' && !empty($_POST["id"])) {
+        $id = $_POST["id"];//айди даты
+        $data = $_POST["data"];
+        $link = mysqli_connect($host, $user, $password, $database) or die("Ошибка " . mysqli_error($link));
+        // выполняем операции с базой данных
+        mysqli_query($link, "UPDATE attendance SET MARK = '$data' WHERE ID_ATT = $id") or die("Ошибка " . mysqli_error($link));
+        // закрываем подключение
+        mysqli_close($link);
+
+        echo "Type: CHANGEMARK";
     }
 }
 ?>

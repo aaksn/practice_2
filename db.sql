@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
--- Хост: 127.0.0.1:3306
--- Время создания: Сен 01 2019 г., 15:08
--- Версия сервера: 10.3.13-MariaDB
--- Версия PHP: 7.1.22
+-- Хост: localhost:3306
+-- Время создания: Сен 01 2019 г., 18:50
+-- Версия сервера: 5.7.24-0ubuntu0.18.04.1
+-- Версия PHP: 7.2.12-1+ubuntu18.04.1+deb.sury.org+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -33,7 +33,7 @@ CREATE TABLE `attendance` (
   `ID_SUBJECT` int(11) NOT NULL,
   `ID_STUDENT` int(11) NOT NULL,
   `ID_DATE` int(11) NOT NULL,
-  `MARK` tinyint(1) NOT NULL DEFAULT 0
+  `MARK` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -41,9 +41,10 @@ CREATE TABLE `attendance` (
 --
 
 INSERT INTO `attendance` (`ID_ATT`, `ID_SUBJECT`, `ID_STUDENT`, `ID_DATE`, `MARK`) VALUES
-(2, 2, 1, 1, 1),
+(2, 2, 1, 1, 0),
 (3, 2, 5, 1, 1),
-(4, 2, 5, 1, 1);
+(4, 2, 1, 2, 1),
+(5, 2, 5, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -84,7 +85,8 @@ CREATE TABLE `dates` (
 --
 
 INSERT INTO `dates` (`ID_DATE`, `DATE`) VALUES
-(1, '01.09.2019');
+(1, '01.09.19'),
+(2, '03.10.19');
 
 -- --------------------------------------------------------
 
@@ -285,13 +287,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `ID_ATT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID_ATT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `dates`
 --
 ALTER TABLE `dates`
-  MODIFY `ID_DATE` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_DATE` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT для таблицы `permissions`
