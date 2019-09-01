@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Авг 30 2019 г., 14:42
+-- Время создания: Сен 01 2019 г., 15:08
 -- Версия сервера: 10.3.13-MariaDB
 -- Версия PHP: 7.1.22
 
@@ -32,9 +32,18 @@ CREATE TABLE `attendance` (
   `ID_ATT` int(11) NOT NULL,
   `ID_SUBJECT` int(11) NOT NULL,
   `ID_STUDENT` int(11) NOT NULL,
-  `DATE_POS` date NOT NULL,
+  `ID_DATE` int(11) NOT NULL,
   `MARK` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `attendance`
+--
+
+INSERT INTO `attendance` (`ID_ATT`, `ID_SUBJECT`, `ID_STUDENT`, `ID_DATE`, `MARK`) VALUES
+(2, 2, 1, 1, 1),
+(3, 2, 5, 1, 1),
+(4, 2, 5, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -44,21 +53,38 @@ CREATE TABLE `attendance` (
 
 CREATE TABLE `courses` (
   `ID_COURSE` int(11) NOT NULL,
-  `COURSE_NAME` varchar(30) NOT NULL,
-  `ID_GROUP` int(11) DEFAULT NULL
+  `COURSE_NAME` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `courses`
 --
 
-INSERT INTO `courses` (`ID_COURSE`, `COURSE_NAME`, `ID_GROUP`) VALUES
-(1, '1 курс', NULL),
-(2, '2 курс', NULL),
-(3, '3 курс', NULL),
-(4, '4 курс', NULL),
-(5, '1 курс маг.', NULL),
-(6, '2 курс маг.', NULL);
+INSERT INTO `courses` (`ID_COURSE`, `COURSE_NAME`) VALUES
+(1, '1 курс'),
+(2, '2 курс'),
+(3, '3 курс'),
+(4, '4 курс'),
+(5, '1 курс маг.'),
+(6, '2 курс маг.');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `dates`
+--
+
+CREATE TABLE `dates` (
+  `ID_DATE` int(11) NOT NULL,
+  `DATE` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `dates`
+--
+
+INSERT INTO `dates` (`ID_DATE`, `DATE`) VALUES
+(1, '01.09.2019');
 
 -- --------------------------------------------------------
 
@@ -196,13 +222,20 @@ INSERT INTO `users` (`ID_USER`, `USERNAME`, `PASSWORD`, `RANK`, `HASH`) VALUES
 ALTER TABLE `attendance`
   ADD PRIMARY KEY (`ID_ATT`),
   ADD KEY `ID_SUBJECT` (`ID_SUBJECT`),
-  ADD KEY `ID_STUDENT` (`ID_STUDENT`);
+  ADD KEY `ID_STUDENT` (`ID_STUDENT`),
+  ADD KEY `ID_DATE` (`ID_DATE`);
 
 --
 -- Индексы таблицы `courses`
 --
 ALTER TABLE `courses`
   ADD PRIMARY KEY (`ID_COURSE`);
+
+--
+-- Индексы таблицы `dates`
+--
+ALTER TABLE `dates`
+  ADD PRIMARY KEY (`ID_DATE`);
 
 --
 -- Индексы таблицы `groups`
@@ -252,7 +285,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `ID_ATT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_ATT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT для таблицы `dates`
+--
+ALTER TABLE `dates`
+  MODIFY `ID_DATE` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT для таблицы `permissions`
@@ -287,7 +326,8 @@ ALTER TABLE `users`
 --
 ALTER TABLE `attendance`
   ADD CONSTRAINT `ATTENDANCE_ibfk_2` FOREIGN KEY (`ID_SUBJECT`) REFERENCES `subjects` (`ID_SUBJECT`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `ATTENDANCE_ibfk_3` FOREIGN KEY (`ID_STUDENT`) REFERENCES `students` (`ID_STUDENT`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `ATTENDANCE_ibfk_3` FOREIGN KEY (`ID_STUDENT`) REFERENCES `students` (`ID_STUDENT`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ATTENDANCE_ibfk_4` FOREIGN KEY (`ID_DATE`) REFERENCES `dates` (`ID_DATE`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
