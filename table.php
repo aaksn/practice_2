@@ -13,6 +13,7 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
     $link = mysqli_connect($host, $user, $password, $database)
     or die("Ошибка " . mysqli_error($link));
     //запрос успеваемости
+    /*
     $datequery = "SELECT DISTINCT dates.ID_DATE, dates.DATE FROM attendance,students,dates WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_DATE=dates.ID_DATE AND attendance.ID_SUBJECT=$subjectid AND students.ID_GROUP=$groupid AND students.ID_COURSE=$courseid";
     $studentsquery = "SELECT DISTINCT students.ID_STUDENT, students.FIO FROM attendance,students WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_SUBJECT=$subjectid AND students.ID_GROUP=$groupid AND students.ID_COURSE=$courseid";
     
@@ -42,10 +43,12 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
         };        
         $students[] = array("id" => $row2[0], "name" => $row2[1], "marks" => $marks);
     };
-
+    */
+    $stud=mysqli_fetch_row(mysqli_query($link, "SELECT students.ID_STUDENT,students.FIO,attendance.ID_ATT, attendance.ID_DATE, dates.DATE, attendance.MARK FROM students,attendance,dates WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_DATE=dates.ID_DATE AND students.ID_COURSE=$courseid AND students.ID_GROUP=$groupid AND attendance.ID_SUBJECT=$subjectid") or die("Ошибка " . mysqli_error($link)));
+    $students[] = array("id" => $stud[0], "name" => $stud[1],"iddate"=>$stud[3],"date"=>$stud[4], "marks" => $stud[5]);
     echo json_encode(array(
         "students" => $students,
-        "dates" => $dates 
+        //"dates" => $dates
     ));
     exit;    
 }
