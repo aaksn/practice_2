@@ -5,16 +5,38 @@ $user = 'root'; // имя пользователя
 $password = ''; // пароль
 
 //Отображение таблицы
-if (!empty($_POST["courseid"]) && !empty($_POST["subjectid"]) && !empty($_POST["groupid"])) {
-    $courseid = $_POST["courseid"];
-    $groupid = $_POST["groupid"];
-    $subjectid = $_POST["subjectid"];
+if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["groupid"])) {
+    $courseid = $_GET["courseid"];
+    $groupid = $_GET["groupid"];
+    $subjectid = $_GET["subjectid"];
 
     $link = mysqli_connect($host, $user, $password, $database)
     or die("Ошибка " . mysqli_error($link));
     //запрос успеваемости
     $query = "SELECT students.FIO,attendance.DATE_POS,attendance.MARK FROM attendance,students WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_SUBJECT=$subjectid AND students.ID_GROUP=$groupid AND students.ID_COURSE=$courseid";
-    $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+    //$result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+    
+    echo json_encode(array(
+        "students" => array(
+            array(
+                "id" => 1,
+                "name" => "Petrov",
+                "marks" => array("1" => 0, "2" => 1)
+            ),
+            array(
+                "id" => 2,
+                "name" => "Sidorov",
+                "marks" => array("3" => 1, "4" => 1)
+            )
+        ),
+        "dates" => array(
+            1 => "date 1",
+            2 => "date 2"
+            ) 
+    ));
+    exit;
+
+    /*
     if ($result) {
         $subjects = []; // Массив для хранения данных
         $rows = mysqli_num_rows($result); // количество полученных строк
@@ -53,7 +75,7 @@ if (!empty($_POST["courseid"]) && !empty($_POST["subjectid"]) && !empty($_POST["
         echo '</tbody><tfoot><tr><td><a href="javascript:addstudent();" class="icon fa-plus"> Добавить студента</a></td></tr></tfoot>';
     } else {
         echo "Выберите группу";
-    }
+    }*/
 }
 
 //Редактирование таблицы

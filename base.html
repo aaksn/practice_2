@@ -360,16 +360,47 @@
         $('#tableviewer').empty();
         $('#tablehelp').text('Подгружаем таблицу...');
         location.href = '#htable';
+        
         $.get('./table.php', {
             courseid: $("#courseselector :selected").val(),
             subjectid: $("#subjectselector :selected").val(),
             groupid: $("input[name='groupselector']:checked").attr("id")
         }).done(function (response) {
             $('#tablehelp').empty();
-            $('#tableviewer').html(response)
+            var obj = $.parseJSON(response);
+            var table = '<thead><tr><th>Имя</th>';
+            $.each(obj.dates, function(key, value){
+                var str = '<th><a id="d' + key + '" href="javascript:changedate(\'d' + key + '\')">' + value + '</a></th>';                
+                table += str;
+            });
+            table += '<th><a href="javascript:adddate();" class="icon fa-plus"></a></th></tr></thead><tbody>';
+            $.each(obj.students, function(key, value){
+                var str = '<tr><td><a id="n' + value.id + '" href="javascript:changename(\'n' + value.id + '\')">'+ value.name + '</a></td>';
+                    $.each(value.marks, function(k, v){
+                        var m = 'times'
+                        if (v == 1) {
+                            m = 'check';                            
+                        }
+                        var s = '<td><a id="m'+ k +'" href="javascript:change(\'m'+ k +'\');" class="icon fa-' + m+ '"></a></td>';
+                        str += s;                        
+                    });                
+                table += str;
+            });
+            table += '</tbody><tfoot><tr><td><a href="javascript:addstudent();" class="icon fa-plus"> Добавить студента</a></td></tr></tfoot>';
+            $('#tableviewer').html(table)
         }).fail(function () {
             $('#tablehelp').text('Нет соединения с сервером')
         });
+        
+        /*
+        var courseid = $("#courseselector :selected").val();
+        var subjectid = $("#subjectselector :selected").val();
+        var groupid = $("input[name='groupselector']:checked").attr("id");
+        $.getJSON('./table.php?courseid='+courseid+'&subjectid='+subjectid+'&groupid='+groupid, function(data) { // ajax-запрос, данные с сервера запишутся в переменную data
+            
+            $('#tablehelp').empty();
+            $('#tableviewer').html(htmlstr);
+        })*/
     }
 </script>
 
