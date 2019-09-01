@@ -116,12 +116,15 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
         $date = $_POST["date"];
         $link = mysqli_connect($host, $user, $password, $database) or die("Ошибка " . mysqli_error($link));
         // выполняем операции с базой данных
+        //Добавляем новую дату
+        $add_date = mysqli_query($link, "INSERT INTO dates(`ID_DATE`, `DATE`) VALUES (,$date)") or die("Ошибка " . mysqli_error($link));
+        $id_date= mysqli_fetch_row(mysqli_query($link, "SELECT ID_DATE FROM dates WHERE DATES=$date") or die("Ошибка " . mysqli_error($link)));
         //ищем всех сдуентов с данными группой, курсом, предметом
         $students = mysqli_query($link, "SELECT students.ID_STUDENT FROM attendance,students WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_SUBJECT=$subjectid AND students.ID_GROUP=$groupid AND students.ID_COURSE=$courseid") or die("Ошибка " . mysqli_error($link));
-        $arr_student = mysqli_fetch_row($dates);
+        $arr_student = mysqli_fetch_row($students);
         //добавляем дату в успеваемость для всех студентов
         for ($i = 0; $i < mysqli_num_rows($students); $i++) {
-            mysqli_query($link, "INSERT INTO attendance (`ID_SUBJECT`, `ID_STUDENT`, `DATE_POS`) VALUES ($subjectid,$arr_student[$i],'$date')") or die("Ошибка " . mysqli_error($link));
+            mysqli_query($link, "INSERT INTO attendance (`ID_SUBJECT`, `ID_STUDENT`, `ID_DATE`) VALUES ($subjectid,$arr_student[$i],'$id_date')") or die("Ошибка " . mysqli_error($link));
         }
         // закрываем подключение
         mysqli_close($link);
@@ -147,7 +150,7 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
         // выполняем операции с базой данных
         //ищем всех сдуентов с данными группой, курсом, предметом
         $students = mysqli_query($link, "SELECT students.ID_STUDENT FROM attendance,students WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_SUBJECT=$subjectid AND students.ID_GROUP=$groupid AND students.ID_COURSE=$courseid") or die("Ошибка " . mysqli_error($link));
-        $arr_student = mysqli_fetch_row($dates);
+        $arr_student = mysqli_fetch_row($students);
         //изменяем дату в успеваемости для всех студентов
         for ($i = 0; $i < mysqli_num_rows($students); $i++) {
             mysqli_query($link, "UPDATE attendance SET DATE_POS=$date WHERE DATE_POS=$date_old AND ID_STUDENT=$arr_student[$i] AND ID_COURSE=$courseid AND ID_GROUP=$groupid AND ID_SUBJECT=$subjectid") or die("Ошибка " . mysqli_error($link));
