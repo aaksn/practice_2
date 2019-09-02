@@ -12,23 +12,21 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
 
     $link = mysqli_connect($host, $user, $password, $database)
     or die("Ошибка " . mysqli_error($link));
-    $students=[];
-    $dates=[];
-    $res=mysqli_query($link, "SELECT students.ID_STUDENT,students.FIO FROM students WHERE students.ID_COURSE=$courseid AND students.ID_GROUP=$groupid") or die("Ошибка " . mysqli_error($link));
-     while($row = mysqli_fetch_row($res)){
-         $mark=[];
-         $marks = mysqli_query($link, "SELECT attendance.ID_ATT, attendance.MARK FROM attendance,students WHERE attendance.ID_STUDENT=$row[0] AND students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_SUBJECT=$subjectid AND students.ID_GROUP=$groupid AND students.ID_COURSE=$courseid") or die("Ошибка " . mysqli_error($link));
-         while ($row2 = mysqli_fetch_row($marks)){
-             $mark[$row2[0]] = $row2[1];  }
-        $students[] = array("id" => $row[0], "name" => $row[1], "marks" => $mark);
-    }
-    $resdate=mysqli_query($link, "SELECT DISTINCT attendance.ID_DATE, dates.DATE FROM students,attendance,dates WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_DATE=dates.ID_DATE AND students.ID_COURSE=$courseid AND students.ID_GROUP=$groupid AND attendance.ID_SUBJECT=$subjectid") or die("Ошибка " . mysqli_error($link));
-    while($row = mysqli_fetch_row($resdate)){
-        $iddate=$row[0];
-        $dates[$iddate] = $row[1];
-    }
+    $res = mysqli_query($link, "SELECT students.ID_STUDENT,students.FIO,attendance.ID_ATT, attendance.ID_DATE, dates.DATE, attendance.MARK FROM students,attendance,dates WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_DATE=dates.ID_DATE AND students.ID_COURSE=$courseid AND students.ID_GROUP=$groupid AND attendance.ID_SUBJECT=$subjectid") or die("Ошибка " . mysqli_error($link));
+    $students = [];
+    $dates = [];
+    $indexes = [];
+    $s = [];
+    while($row = mysqli_fetch_row($res)){
+        $students[$row[0]] = $row[1];
+        $dates[$row[3]] = $row[4];
+        $indexes[$row[0]][$row[2]] = $row[5];
+   }
+   foreach ($students as $key => $value) {
+       $s[] = array("id" => $key, "name" => $value, "marks" => $indexes[$key]);
+   }
     echo json_encode(array(
-        "students" => $students,
+        "students" => $s,
         "dates" => $dates
     ));
     exit;    
