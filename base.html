@@ -378,7 +378,7 @@
 
     function showtable() {
         $('#actions').show();
-        $("a").attr("href", "./PDFsave.php?courseid="+$("#courseselector :selected").val()+"&subjectid="+$("#subjectselector :selected").val()+"&groupid="+$("input[name='groupselector']:checked").attr("id"));
+        $("#getpdf").attr("href", "./PDFsave.php?courseid="+$("#courseselector :selected").val()+"&subjectid="+$("#subjectselector :selected").val()+"&groupid="+$("input[name='groupselector']:checked").attr("id"));
         $('#tablehelp').empty();
         $('#tableviewer').empty();
         $('#tablehelp').text('Подгружаем таблицу...');
