@@ -31,18 +31,19 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
     require('fpdf/tfpdf.php');
     $pdf = new tFPDF();
     $pdf->AddFont('DejaVu', '', 'DejaVuSansCondensed.ttf', true);
-    $pdf->AddPage();
+    $pdf->AddPage('L');
     $pdf->SetFont('DejaVu', '', 10);
-    $width = 52;
+    $pdf->Cell(0, 10,$courseid.' курс '.$groupid.' группа',0,0,'C');
+$pdf->Ln();
+    $width = 55;
     $pdf->Cell($width, 10);
     foreach ($dates as $date) {
 
-        $pdf->Cell(16, 10, $date, 1);
+        $pdf->Cell(16, 10, $date, 1,0,'C');
     }
     foreach ($students as $student) {
-        $pdf->SetFont('DejaVu', '', 10);
         $pdf->Ln();
-        $pdf->Cell($width, 10, $student["name"], 1);
+        $pdf->Cell($width, 10, $student["name"], 1,0,'C');
         foreach ($student["marks"] as $mark)
             if ($mark == '1') {
                 $pdf->Cell(16, 10, '+', 1, 0, 'C');
