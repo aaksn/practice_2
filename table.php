@@ -26,7 +26,7 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
     foreach ($students as $key => $value) {
         $s[] = array("id" => $key, "name" => $value, "marks" => $indexes[$key]);
     }
-    header('Content-Type: application/json');
+    //header('Content-Type: application/json');
     echo json_encode(array(
         "students" => $s,
         "dates" => $dates

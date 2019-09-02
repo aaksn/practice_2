@@ -6,6 +6,7 @@ $password = ''; // пароль
 $link = mysqli_connect($host, $user, $password, $database) or die("Ошибка " . mysqli_error($link));
 
 if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["groupid"])) {
+    header('Content-Type: application/pdf');
     $courseid = $_GET["courseid"];
     $groupid = $_GET["groupid"];
     $subjectid = $_GET["subjectid"];
@@ -27,7 +28,7 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
 //define('FPDF_FONTPATH','fpdf/font');
     require('fpdf/tfpdf.php');
     $pdf = new tFPDF();
-    $pdf->AddFont('DejaVu', '', 'DejaVuSansCondensed.ttf', true);
+    $pdf->AddFont('DejaVu', '', './DejaVuSansCondensed.ttf', true);
     $pdf->AddPage('L');
     $pdf->SetFont('DejaVu', '', 10);
     $pdf->Cell(0, 10, $courseid . ' курс ' . $groupid . ' группа', 0, 0, 'C');
