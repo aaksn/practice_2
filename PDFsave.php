@@ -1,17 +1,14 @@
 <?php
-require_once("dbcontroller.php");
 $host = 'localhost';
 $database = 'db'; // имя базы данных
 $user = 'root'; // имя пользователя
 $password = ''; // пароль
 $link = mysqli_connect($host, $user, $password, $database) or die("Ошибка " . mysqli_error($link));
 
-//$db_handle = new DBController();
 if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["groupid"])) {
     $courseid = $_GET["courseid"];
     $groupid = $_GET["groupid"];
     $subjectid = $_GET["subjectid"];
-    $outputpath=$_GET["output"];
     $students = [];
     $dates = [];
     $res = mysqli_query($link, "SELECT ID_STUDENT,FIO FROM students WHERE students.ID_COURSE=$courseid AND students.ID_GROUP=$groupid");
@@ -33,17 +30,17 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
     $pdf->AddFont('DejaVu', '', 'DejaVuSansCondensed.ttf', true);
     $pdf->AddPage('L');
     $pdf->SetFont('DejaVu', '', 10);
-    $pdf->Cell(0, 10,$courseid.' курс '.$groupid.' группа',0,0,'C');
-$pdf->Ln();
+    $pdf->Cell(0, 10, $courseid . ' курс ' . $groupid . ' группа', 0, 0, 'C');
+    $pdf->Ln();
     $width = 55;
     $pdf->Cell($width, 10);
     foreach ($dates as $date) {
 
-        $pdf->Cell(16, 10, $date, 1,0,'C');
+        $pdf->Cell(16, 10, $date, 1, 0, 'C');
     }
     foreach ($students as $student) {
         $pdf->Ln();
-        $pdf->Cell($width, 10, $student["name"], 1,0,'C');
+        $pdf->Cell($width, 10, $student["name"], 1, 0, 'C');
         foreach ($student["marks"] as $mark)
             if ($mark == '1') {
                 $pdf->Cell(16, 10, '+', 1, 0, 'C');
@@ -51,6 +48,6 @@ $pdf->Ln();
                 $pdf->Cell(16, 10, '-', 1, 0, 'C');
             }
     }
-    $pdf->Output($outputpath);
+    $pdf->Output($courseid . ' курс ' . $groupid . ' группа.pdf', 'D');
 }
 ?>
