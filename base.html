@@ -69,7 +69,7 @@
                     <input id="file-upload" name="file_upload" type="file"/>
                 </li>
 
-                <li><a href="./login.html" class="button icon fa-download">Скачать EXCEL</a></li>
+                <li><a href="./login.html" class="button icon fa-download" id="getexcel">Скачать EXCEL</a></li>
                 <li><a href="./login.html" class="button icon fa-download" id="getpdf">Скачать PDF</a></li>
             </ul>
         </div>
@@ -379,6 +379,7 @@
     function showtable() {
         $('#actions').show();
         $("#getpdf").attr("href", "./PDFsave.php?courseid="+$("#courseselector :selected").val()+"&subjectid="+$("#subjectselector :selected").val()+"&groupid="+$("input[name='groupselector']:checked").attr("id"));
+        $("#getexcel").attr("href", "./EXCELsave.php?courseid="+$("#courseselector :selected").val()+"&subjectid="+$("#subjectselector :selected").val()+"&groupid="+$("input[name='groupselector']:checked").attr("id"));
         $('#tablehelp').empty();
         $('#tableviewer').empty();
         $('#tablehelp').text('Подгружаем таблицу...');
