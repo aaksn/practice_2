@@ -292,8 +292,10 @@
             $("#tableviewer tbody").append('<tr></tr>');
             $("#tableviewer tbody tr:last").append('<td><a id="n' + obj.id + '" href="javascript:changename(' + "'n" + obj.id + "'" + ')">' + fio + '</a></td>');
             if ($("#tableviewer tbody tr").length > 1) {
+                var j = 0;
                 for (var i = $("#tableviewer tbody tr:first td").length - 2; i >= 0; i--) {
-                    $("#tableviewer tbody tr:last").append('<td><a id="m' + obj.dates[i] + '" href="javascript:change(\'m' + obj.dates[i] + '\')" class="icon fa-times"></a></td>');
+                    $("#tableviewer tbody tr:last").append('<td><a id="m' + obj.dates[j] + '" href="javascript:change(\'m' + obj.dates[j] + '\')" class="icon fa-times"></a></td>');
+                    j++;
                 }
             }
         }).fail(function () {
