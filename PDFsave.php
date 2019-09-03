@@ -7,7 +7,7 @@ $link = mysqli_connect($host, $user, $password, $database) or die("Ошибка 
 
 if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["groupid"])) {
     if ($_GET["groupid"] == 'undefined' | $_GET["subjectid"] == 'undefined') {
-        exit;
+        header("Location: base.html"); exit();
     }
     header('Content-Type: application/pdf');
     $courseid = $_GET["courseid"];
