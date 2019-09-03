@@ -280,21 +280,22 @@
     }
 
     function addstudent() {
-        var response = 99;
-        var rownum = 98;
-        $("#tableviewer tbody").append('<tr></tr>');
-        $("#tableviewer tbody tr:last").append('<td><a id="n' + response + '" href="javascript:changename(' + "'n" + response + "'" + ')">ФИО</a></td>');
-        if ($("#tableviewer tbody tr").length > 1) {
-            for (var i = $("#tableviewer tbody tr:first td").length - 2; i >= 0; i--) {
-                $("#tableviewer tbody tr:last").append('<td><a id="m' + rownum + '_' + response + '" href="javascript:change(' + "'m" + rownum + '_' + response + ')" class="icon fa-times"></a></td>');
-            }
-        }
-
+        var fio = 'Фио';
         $.post('./table.php', {
             type: 'ADDSTUDENT',
-            idtable: $("#courseselector :selected").val()
-        }).done(function (response) {
-            //alert(response);
+            courseid: $("#courseselector :selected").val(),
+            subjectid: $("#subjectselector :selected").val(),
+            groupid: $("input[name='groupselector']:checked").attr("id"),
+            fio: fio
+        }).done(function (data) {
+            var obj = $.parseJSON(data);
+            $("#tableviewer tbody").append('<tr></tr>');
+            $("#tableviewer tbody tr:last").append('<td><a id="n' + obj.id + '" href="javascript:changename(' + "'n" + obj.id + "'" + ')">' + fio + '</a></td>');
+            if ($("#tableviewer tbody tr").length > 1) {
+                for (var i = $("#tableviewer tbody tr:first td").length - 2; i >= 0; i--) {
+                    $("#tableviewer tbody tr:last").append('<td><a id="m' + obj.dates[i] + '" href="javascript:change(\'m' + obj.dates[i] + '\')" class="icon fa-times"></a></td>');
+                }
+            }
         }).fail(function () {
             alert('No connection ')
         });
