@@ -261,19 +261,29 @@
     }
 
     function adddate() {
+        var date = "01.01";
+        /*
         $("#tableviewer thead th:last").detach();
         var response = 99;
         $("#tableviewer thead tr").append('<th><a id="d' + response + '" href="javascript:changedate(' + "'d" + response + "'" + ')">01.01</a></th><th><a href="javascript:adddate()" class="icon fa-plus"></a></th>"');
         //Получить id строки
         var rownum = 98;
         $("#tableviewer tbody tr").append('<td><a id="m' + rownum + '_' + response + '" href="javascript:change(' + "'m" + rownum + '_' + response + ')" class="icon fa-times"></a></td>');
-
+        */
         $.post('./table.php', {
             type: 'ADDDATE',
-            idtable: $("#courseselector :selected").val()
-        }).done(function (response) {
-            //response должен вернут id даты
+            courseid: $("#courseselector :selected").val(),
+            subjectid: $("#subjectselector :selected").val(),
+            groupid: $("input[name='groupselector']:checked").attr("id"),
+            date: date
+        }).done(function (data) {            
             //alert(response);
+            var obj = $.parseJSON(data);
+            $("#tableviewer thead th:last").detach();
+            $("#tableviewer thead tr").append('<th><a id="d' + obj.id + '" href="javascript:changedate(' + "'d" + obj.id + "'" + ')">' + date + '</a></th><th><a href="javascript:adddate()" class="icon fa-plus"></a></th>"');
+            for (let i = 0; i < obj.ids.length; i++) {
+                $("#tableviewer tbody tr:eq("+i+")").append('<td><a id="m' + obj.ids[i] + '" href="javascript:change(\'m' + obj.ids[i] + '\')" class="icon fa-times"></a></td>');  
+            }
         }).fail(function () {
             alert('No connection ')
         });

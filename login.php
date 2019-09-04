@@ -51,7 +51,7 @@ if(isset($_POST['submit']))
     else
     {
         print '<script>alert( "Вы ввели неправильный логин/пароль"); window.location.replace("login.html");</script>';
-        header("Location: login.html"); exit();
+        header("Location: login.html");
     }
 }
 
@@ -67,11 +67,7 @@ if(!empty($_GET['logout']))
 
 //изменение пароля
 if(isset($_POST['repass']))
-{
-    // Вытаскиваем из БД запись, у которой логин равняеться введенному
-    //------------------------------------------------------|
-    //ТУТ ХЗ КАК ПОЛУЧИТЬ ЛОГИН, КОТОРЫЙ УЖЕ ВВЕЛИ РАНЬШЕ   |
-    //------------------------------------------------------|
+{    
     $lp = $_POST['login'];
     $query = mysqli_query($link,"SELECT ID_USER, PASSWORD FROM users WHERE USERNAME=$lp");
     $data = mysqli_fetch_assoc($query);
@@ -91,12 +87,12 @@ if(isset($_POST['repass']))
         setcookie("id", $data['ID_USER'], time()+60*60*24*30);
         setcookie("hash", $hash, time()+60*60*24*30,null,null,null,true); // httponly !!!
 
-        // Переадресовываем браузер на страницу проверки нашего скрипта
-        header("Location: check.php"); exit();
+        print '<script>alert( "Пароль сменён"); window.location.replace("login.html");</script>';
+        
     }
     else
     {
-        print "Вы ввели неправильный логин/пароль";
+        print '<script>alert( "Вы ввели неправильный пароль"); window.location.replace("changepass.html");</script>';
     }
 }
 

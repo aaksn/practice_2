@@ -26,6 +26,7 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
     foreach ($students as $key => $value) {
         $s[] = array("id" => $key, "name" => $value, "marks" => $indexes[$key]);
     }
+    
     //header('Content-Type: application/json');
     echo json_encode(array(
         "students" => $s,
@@ -53,12 +54,8 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
         // выполняем операции с базой данных
         //добавляем студента
         mysqli_query($link, "INSERT INTO `students` (`ID_STUDENT`, `FIO`, `ID_GROUP`, `ID_COURSE`) VALUES (NULL, '$fio', '$groupid', '$courseid')") or die("Ошибка " . mysqli_error($link));
-        //ищем его id
-        //$qid = mysqli_query($link, "SELECT ID_STUDENT FROM students WHERE FIO=$fio AND ID_COURSE=$courseid AND ID_GROUP=$groupid") or die("Ошибка " . mysqli_error($link));
         $qid = mysqli_query($link, "SELECT MAX(ID_STUDENT) FROM students WHERE ID_COURSE=$courseid AND ID_GROUP=$groupid") or die("Ошибка " . mysqli_error($link));
-        
-        $arr_studentid = mysqli_fetch_row($qid);
-        
+        $arr_studentid = mysqli_fetch_row($qid);        
         //добавляем все даты в успеваемость        
         $dates = mysqli_query($link, "SELECT DISTINCT ID_DATE FROM attendance,students WHERE attendance.ID_STUDENT=students.ID_STUDENT AND ID_GROUP=$groupid AND ID_COURSE=$courseid and ID_SUBJECT=$subjectid") or die("Ошибка " . mysqli_error($link));
         $index = mysqli_fetch_row(mysqli_query($link, "SELECT MAX(ID_ATT) FROM attendance"))[0];
@@ -68,18 +65,6 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
             $indexes[] = $index;            
             mysqli_query($link, "INSERT INTO `attendance` (`ID_ATT`, `ID_SUBJECT`, `ID_STUDENT`, `ID_DATE`, `MARK`) VALUES (NULL, '$subjectid', '$arr_studentid[0]', '$row[0]', '0')") or die("Ошибка " . mysqli_error($link));                        
         }
-
-
-        
-        /*
-        for ($i = 0; $i < mysqli_num_rows($subjects); $i++) {
-            $dates = mysqli_fetch_row(mysqli_query($link, "SELECT DISTINCT ID_DATE FROM attendance,students WHERE attendance.ID_STUDENT=students.ID_STUDENT AND ID_GROUP=$groupid AND ID_COURSE=$courseid and ID_SUBJECT=$subjects[i])") or die("Ошибка " . mysqli_error($link)));
-            for ($j = 0; $j < mysqli_num_rows($dates); $j++) {
-                mysqli_query($link, "INSERT INTO attendance (`ID_SUBJECT`, `ID_STUDENT`, `ID_DATE`) VALUES ($subjects[i],$arr_studentid[0],$dates[$j])") or die("Ошибка " . mysqli_error($link));
-            }
-        }               
-        */
-        //echo "Type: ADDSTUDENT";
         echo json_encode(array(
             "id" => $arr_studentid[0],
             "dates" => $indexes
@@ -89,17 +74,23 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
         $date = $_POST["date"];        
         // выполняем операции с базой данных
         //Добавляем новую дату
-        $add_date = mysqli_query($link, "INSERT INTO dates(`ID_DATE`, `DATE`) VALUES (,$date)") or die("Ошибка " . mysqli_error($link));
-        $id_date= mysqli_fetch_row(mysqli_query($link, "SELECT ID_DATE FROM dates WHERE DATES=$date") or die("Ошибка " . mysqli_error($link)));
-        //ищем всех сдуентов с данными группой, курсом, предметом
-        $students = mysqli_query($link, "SELECT students.ID_STUDENT FROM attendance,students WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_SUBJECT=$subjectid AND students.ID_GROUP=$groupid AND students.ID_COURSE=$courseid") or die("Ошибка " . mysqli_error($link));
-        $arr_student = mysqli_fetch_row($students);
+        $add_date = mysqli_query($link, "INSERT INTO dates(`ID_DATE`, `DATE`) VALUES (NULL, '$date')") or die("Ошибка " . mysqli_error($link));
+        $query = mysqli_query($link, "SELECT MAX(ID_DATE) FROM dates") or die("Ошибка " . mysqli_error($link));
+        $id_date= mysqli_fetch_row($query)[0];
+        //ищем всех студентов с данными группой, курсом, предметом
+        $students = mysqli_query($link, "SELECT DISTINCT students.ID_STUDENT FROM attendance,students WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_SUBJECT=$subjectid AND students.ID_GROUP=$groupid AND students.ID_COURSE=$courseid") or die("Ошибка " . mysqli_error($link));
         //добавляем дату в успеваемость для всех студентов
-        for ($i = 0; $i < mysqli_num_rows($students); $i++) {
-            mysqli_query($link, "INSERT INTO attendance (`ID_SUBJECT`, `ID_STUDENT`, `ID_DATE`) VALUES ($subjectid,$arr_student[$i],'$id_date')") or die("Ошибка " . mysqli_error($link));
-        }
-        
-        echo "Type: ADDSTUDENT";
+        $index = mysqli_fetch_row(mysqli_query($link, "SELECT MAX(ID_ATT) FROM attendance"))[0];
+        $indexes = []; 
+        while ($row = mysqli_fetch_row($students)){
+            $index++;
+            $indexes[] = $index; 
+            mysqli_query($link, "INSERT INTO `attendance` (`ID_ATT`, `ID_SUBJECT`, `ID_STUDENT`, `ID_DATE`, `MARK`) VALUES (NULL, '$subjectid', '$row[0]', '$id_date', '0')") or die("Ошибка " . mysqli_error($link));                        
+        }        
+        echo json_encode(array(
+            "id" => $id_date,
+            "ids" => $indexes
+        ));
     }
     if ($_POST["type"] == 'CHANGENAME' && !empty($_POST["data"]) && !empty($_POST["id"])) {       
         $fio = $_POST["data"];//новые фио
