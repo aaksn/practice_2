@@ -102,19 +102,27 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
     }
     if ($_POST["type"] == 'CHANGEDATE' && !empty($_POST["id"]) && !empty($_POST["data"])) {
         $id_date = $_POST["id"];//айди даты
-        $data = $_POST["data"];        
+        $data = $_POST["data"];
         // выполняем операции с базой данных
         mysqli_query($link, "UPDATE dates SET DATE='$data' WHERE ID_DATE=$id_date") or die("Ошибка " . mysqli_error($link));
-       
+
         echo "Type: CHANGEDATE";
     }
     if ($_POST["type"] == 'CHANGEMARK' && !empty($_POST["id"])) {
         $id = $_POST["id"];//айди даты
-        $data = $_POST["data"];        
+        $mark = $_POST["data"];
         // выполняем операции с базой данных
-        mysqli_query($link, "UPDATE attendance SET MARK = '$data' WHERE ID_ATT = $id") or die("Ошибка " . mysqli_error($link));
+        mysqli_query($link, "UPDATE attendance SET MARK = '$mark' WHERE ID_ATT = $id") or die("Ошибка " . mysqli_error($link));
         
         echo "Type: CHANGEMARK";
+    }
+    if ($_POST["type"] == 'CHANGEALLMARK' && !empty($_POST["id"])) {
+        $id_date = $_POST["id"];//айди даты
+        $mark = $_POST["data"];
+        // выполняем операции с базой данных
+        mysqli_query($link, "UPDATE attendance,students SET MARK = '$mark' WHERE attendance.ID_STUDENT=students.ID_STUDENT AND ID_DATE = $id_date AND ID_GROUP=$groupid AND ID_COURSE=$courseid and ID_SUBJECT=$subjectid") or die("Ошибка " . mysqli_error($link));
+
+        echo "Type: CHANGEALLMARK";
     }
     // закрываем подключение
     mysqli_close($link);

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Хост: localhost:3306
--- Время создания: Сен 01 2019 г., 18:50
--- Версия сервера: 5.7.24-0ubuntu0.18.04.1
--- Версия PHP: 7.2.12-1+ubuntu18.04.1+deb.sury.org+1
+-- Хост: 127.0.0.1:3306
+-- Время создания: Сен 03 2019 г., 21:22
+-- Версия сервера: 10.3.13-MariaDB
+-- Версия PHP: 7.1.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -33,7 +33,7 @@ CREATE TABLE `attendance` (
   `ID_SUBJECT` int(11) NOT NULL,
   `ID_STUDENT` int(11) NOT NULL,
   `ID_DATE` int(11) NOT NULL,
-  `MARK` tinyint(1) NOT NULL DEFAULT '0'
+  `MARK` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `attendance` (
 --
 
 INSERT INTO `attendance` (`ID_ATT`, `ID_SUBJECT`, `ID_STUDENT`, `ID_DATE`, `MARK`) VALUES
-(2, 2, 1, 1, 0),
+(2, 2, 1, 1, 1),
 (3, 2, 5, 1, 1),
 (4, 2, 1, 2, 1),
 (5, 2, 5, 2, 1);
@@ -85,8 +85,8 @@ CREATE TABLE `dates` (
 --
 
 INSERT INTO `dates` (`ID_DATE`, `DATE`) VALUES
-(1, '01.09.19'),
-(2, '03.10.19');
+(1, '10.10.18'),
+(2, '23.01.19');
 
 -- --------------------------------------------------------
 
@@ -115,6 +115,7 @@ INSERT INTO `groups` (`ID_GROUP`, `GROUP_NAME`, `ID_COURSE`, `ID_SUBJECT`) VALUE
 (2, '2 группа', 1, 2),
 (2, '2 группа', 2, 0),
 (3, '3 группа', 1, 2),
+(3, '3 группа', 1, 3),
 (4, '4 группа', 1, 2),
 (4, '4 группа', 1, 4),
 (5, '5 группа', 1, 2);
@@ -159,7 +160,7 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`ID_STUDENT`, `FIO`, `ID_GROUP`, `ID_COURSE`) VALUES
-(1, 'Сидоров Иван Иванович', 1, 1),
+(1, 'Сидоров Иван Иванович аг', 1, 1),
 (2, 'Сидоров Иван Иванович 2к', 1, 2),
 (3, 'Сидоров Иван Иванович 3к', 1, 3),
 (4, 'Сидоров Иван Иванович 4к', 1, 4),
@@ -212,7 +213,7 @@ INSERT INTO `users` (`ID_USER`, `USERNAME`, `PASSWORD`, `RANK`, `HASH`) VALUES
 (5, 'user', 'user', 111, ''),
 (6, 'first', '1fbf04ad51bd056831bad3b1f685aff7', 666, ''),
 (7, 'rusik', '20b29fe263143860f94565d0092645d7', 666, ''),
-(8, 'test', 'fb469d7ef430b0baf0cab6c436e70375', 666, '6dc31230c7d24cf54f91ea68629e3abb');
+(8, 'test', 'fb469d7ef430b0baf0cab6c436e70375', 666, 'b6c19c20e8cacf0011ddc8c5b9db9ab9');
 
 --
 -- Индексы сохранённых таблиц
