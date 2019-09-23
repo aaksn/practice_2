@@ -21,7 +21,9 @@ if (isset($_COOKIE['id']) and isset($_COOKIE['hash']))
     }
     else
     {
-        print $userdata['USERNAME'];        
+        //print $userdata['USERNAME'];        
+        $perm = 1; 
+        echo json_encode(array("username" => $userdata['USERNAME'], "permissions" => $perm));        
     }
     mysqli_close($link);
 }

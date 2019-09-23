@@ -114,7 +114,9 @@
 <script src="assets/js/main.js"></script>
 <!--<script src="assets/js/base.js"></script>-->
 <script type="text/javascript">
-    function getgrouplist() {
+    var perm = 0;
+
+    function getgrouplist() {        
         $.get('./filelist.php', {
                 courseid: $("#courseselector :selected").val(),
                 subjectid: $("#subjectselector :selected").val()
@@ -123,18 +125,41 @@
                 $('#courses').html('');
                 var obj = $.parseJSON(response);
                 $.each(obj.elements, function(key, value){
-                    var element = '<li id=' + key + 'f><input type="radio" id="' + key + '" name="groupselector" /><label for="' + key + '">' + value + '</label><a href="javascript:editpos(' + key + ');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos(' + key + ');" class="button primary small icon fa-trash">Удалить</a></li>';
-                    $('#courses').append(element);
+                    var input = '<li id=' + key + 'f><input type="radio" id="' + key + '" name="groupselector"><label for="' + key + '">' + value + '</label>';
+                    
+                    if (perm){
+                        var edit = '<a href="javascript:editpos(' + key + ');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos(' + key + ');" class="button primary small icon fa-trash">Удалить</a>';
+                        input += edit;
+                    }
+                    $('#courses').append(input + '</li>');
                 });            
             }).fail(function () {
                 $('#courses').text('Не удалось подключиться к серверу')
             });
+            
     }
 
     $(document).ready(
         function () {
             $('#actions').hide();
-            
+            $('.button.icon.fa-plus').hide();
+            //Логин пользователя
+            $.get('check.php', {
+                
+            }).done(function (response) {                
+                if (response.length > 0) {
+                    var obj = $.parseJSON(response);
+                    perm = obj.permissions;
+                    if (perm){
+                        $('.button.icon.fa-plus').show();
+                    }
+                    $('#prelogin').text('Вы вошли как ' + obj.username);
+                    $('#loginout').text('Выйти');
+                    $("#loginout").attr("href", "login.php?logout=true");
+                }
+            }).fail(function () {
+                alert('Сервер авторизации недоступен')
+            });
             //Список групп
             $.get('./filelist.php', {
                 course: $("#courseselector :selected").val()
@@ -150,19 +175,7 @@
                 
             }).fail(function () {
                 $('#courses').text('Не удалось подключиться к серверу')
-            });
-            //Логин пользователя
-            $.get('check.php', {
-                
-            }).done(function (response) {
-                if (response.length > 0) {
-                    $('#prelogin').text('Вы вошли как ' + response);
-                    $('#loginout').text('Выйти');
-                    $("#loginout").attr("href", "login.php?logout=true");
-                }
-            }).fail(function () {
-                alert('Сервер авторизации недоступен')
-            });
+            });            
         }
     )
 
@@ -404,7 +417,14 @@
                 table += str;
             });
             table += '</tbody><tfoot><tr><td><a href="javascript:addstudent();" class="icon fa-plus"> Добавить студента</a></td></tr></tfoot>';
-            $('#tableviewer').html(table)
+            $('#tableviewer').html(table);
+            if (!perm){
+                $('[href ~= "javascript:addstudent();"]').hide();
+                $('[href ~= "javascript:adddate();"]').hide();
+                $('[href *= "javascript:change("]').removeAttr("href");
+                $('[href *= "javascript:changename("]').removeAttr("href");
+                $('[href *= "javascript:changedate("]').removeAttr("href");
+            }
         }).fail(function () {
             $('#tablehelp').text('Нет соединения с сервером')
         });
