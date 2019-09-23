@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>Войти</title>
+		<title>Сменить пароль</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -15,36 +15,40 @@
 
 				<section class="banner onload-image-fade-in onload-content-fade-right style2 fullscreen orient-center content-align-center image-position-center -">
 						<div class="content">
-							<h2 id="header">Войти</h2>							
+							<h2>Сменить пароль</h2>
+							<div id="checkhelp">
+									Для смены пароля вам необходимо получить проверочный код у администратора и ввести его ниже
+							</div>							
 							<form method="POST" action="login.php">
 								<div class="fields" align="left">
 									<div class="field">
 										<label for="login">Логин</label>
 										<input type="text" required name="login" id="login">
-									</div>
-									<div class="field">
-										<label for="password">Пароль</label>
-										<input type="password" required name="password" id="password" value="">
 									</div>									
-									<div class="field" id="checkfield">
-										<input type="checkbox" id="c" name="not_attach_ip">
-										<label for="c">Не запоминать меня</label>
+									<div class="field">
+										<label for="login">Проверочный код</label>
+										<input type="text" required name="checkfield" id="checkfield">
+									</div>
+                                    <div class="field">
+										<label for="password">Новый пароль</label>
+										<input type="password" required name="password" id="password" value="">
+                                    </div>
+                                    <div class="field">
+										<label for="password">Повторите новый пароль</label>
+										<input type="password" required name="password" id="password" value="">
 									</div>
 								</div>
-								
-								<div class="field third">
-									
-									<input class="primary button fit" type="submit" name="submit" id="submit" value="Войти">
-									
+								<div id="passlabel">Пароли не совпадают!</div>
+								<div class="field third">									
+									<input class="primary button fit" type="submit" name="submit" id="submit" value="Отправить">									
 								</div>
-							</form>							
-							<a href="./resetpass.html">Забыли пароль</a> | <a href="javascript:changepass();">Смена пароля</a> | <a href="./register.html">Регистрация</a>
-						</div>
+                            </form>	
+                        </div>
 
 						<div class="image">
 							<img src="./images/banner.jpg" alt="">
 						</div>
-					</section>
+				</section>
 			</div>
 
 		<!-- Scripts -->
@@ -53,18 +57,14 @@
 			<script src="assets/js/jquery.scrolly.min.js"></script>
 			<script src="assets/js/browser.min.js"></script>
 			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+            <script src="assets/js/util.js"></script>
+            <script src="assets/js/main.js"></script>
 			<script src="assets/js/base.js"></script>
 			<script type="text/javascript">
-				function changepass() {
-					$("#checkfield").empty();
-					$("#submit").val("Далее");
-					$("#header").text("Сменить пароль");
-					$("form").attr("action", "post.php");
-				};
-
+				$(document).ready(
+				function () {
+					//$('fields field').hide();
+				});
 			</script>
-
 	</body>
 </html>

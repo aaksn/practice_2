@@ -20,11 +20,13 @@ if (!empty($_GET["course"])) {
             $row = mysqli_fetch_row($result);
             $subjects[$row[0]] = $row[1];
         };
-
+        /*
         //Пример
         foreach ($subjects as $key => $value) {
             echo '<option value="' . $key . '">' . $value . '</option>';
         };
+        */
+        echo json_encode(array("subjects" => $subjects));
     };
 // закрываем подключение
     mysqli_close($link);
@@ -49,13 +51,9 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"])) {
             $row = mysqli_fetch_row($result);
             $course[$row[0]] = $row[1];
         };
-
-        //Выводим результат
-        foreach ($course as $key => $value) {
-            echo '<li id=' . $key . 'f><input type="radio" id="' . $key . '" name="groupselector" /><label for="' . $key . '">' . $value . '</label><a href="javascript:editpos(' . $key . ');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos(' . $key . ');" class="button primary small icon fa-trash">Удалить</a></li>';
-            // очищаем результат
-            //mysqli_free_result($result);
-        };
+        
+        //Выводим результат        
+        echo json_encode(array("elements" => $course));
         // закрываем подключение
         mysqli_close($link);
     };

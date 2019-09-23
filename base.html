@@ -87,37 +87,7 @@
             <div class="table-wrapper">
                 <span id="tablehelp">Для отображения необходимо выбрать группу</span>
                 <table class="alt" id="tableviewer">
-                    <thead>
-                    <tr>
-                        <th>Имя</th>
-                        <th><a id="d1" href="javascript:changedate('d1')">01.01</a></th>
-                        <th>02.02</th>
-                        <th>04.12</th>
-                        <th>05.12</th>
-                        <th><a href="javascript:adddate();" class="icon fa-plus"></a></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td><a id="n1" href="javascript:changename('n1')">Name1</a></td>
-                        <td><a id="m1" href="javascript:change('m1');" class="icon fa-times"></a></td>
-                        <td><a href="" class="icon fa-check"></a></td>
-                        <td><a href="" class="icon fa-check"></a></td>
-                        <td><a href="" class="icon fa-check"></a></td>
-                    </tr>
-                    <tr>
-                        <td>Name2</td>
-                        <td><a href="" class="icon fa-times"></a></td>
-                        <td><a href="" class="icon fa-check"></a></td>
-                        <td><a href="" class="icon fa-check"></a></td>
-                        <td><a href="" class="icon fa-check"></a></td>
-                    </tr>
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <td><a href="javascript:addstudent();" class="icon fa-plus"> Добавить студента</a></td>
-                    </tr>
-                    </tfoot>
+                    
                 </table>
             </div>
         </div>
@@ -144,6 +114,23 @@
 <script src="assets/js/main.js"></script>
 <!--<script src="assets/js/base.js"></script>-->
 <script type="text/javascript">
+    function getgrouplist() {
+        $.get('./filelist.php', {
+                courseid: $("#courseselector :selected").val(),
+                subjectid: $("#subjectselector :selected").val()
+            }).done(function (response) {
+                //$('#courses').html(response)
+                $('#courses').html('');
+                var obj = $.parseJSON(response);
+                $.each(obj.elements, function(key, value){
+                    var element = '<li id=' + key + 'f><input type="radio" id="' + key + '" name="groupselector" /><label for="' + key + '">' + value + '</label><a href="javascript:editpos(' + key + ');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos(' + key + ');" class="button primary small icon fa-trash">Удалить</a></li>';
+                    $('#courses').append(element);
+                });            
+            }).fail(function () {
+                $('#courses').text('Не удалось подключиться к серверу')
+            });
+    }
+
     $(document).ready(
         function () {
             $('#actions').hide();
@@ -152,15 +139,15 @@
             $.get('./filelist.php', {
                 course: $("#courseselector :selected").val()
             }).done(function (response) {
-                $('#subjectselector').html(response);
-                $.get('./filelist.php', {
-                    courseid: $("#courseselector :selected").val(),
-                	subjectid: $("#subjectselector :selected").val()
-                }).done(function (response) {
-                    $('#courses').html(response)
-                }).fail(function () {
-                    $('#courses').text('Не удалось подключиться к серверу')
+                //$('#subjectselector').html(response);
+                $('#subjectselector').html('');
+                var obj = $.parseJSON(response);
+                $.each(obj.subjects, function(key, value){
+                    var element = '<option value="' + key + '">' + value + '</option>';
+                    $('#subjectselector').append(element)
                 });
+                getgrouplist() 
+                
             }).fail(function () {
                 $('#courses').text('Не удалось подключиться к серверу')
             });
@@ -176,35 +163,28 @@
             }).fail(function () {
                 alert('Сервер авторизации недоступен')
             });
-        });
+        }
+    )
 
     document.getElementById("courseselector").onchange = function changecourse() {        
         $.get('./filelist.php', {
             course: $("#courseselector :selected").val()
         }).done(function (response) {
-            $('#subjectselector').html(response);
-            $.get('./filelist.php', {
-                courseid: $("#courseselector :selected").val(),
-                subjectid: $("#subjectselector :selected").val()
-            }).done(function (response) {
-                $('#courses').html(response)
-            }).fail(function () {
-                $('#courses').text('Не удалось подключиться к серверу')
-            });
+            //$('#subjectselector').html(response);
+            $('#subjectselector').html('');
+            var obj = $.parseJSON(response);
+                $.each(obj.subjects, function(key, value){
+                    var element = '<option value="' + key + '">' + value + '</option>';
+                    $('#subjectselector').append(element)
+                })
+                getgrouplist()
         }).fail(function () {
             $('#courses').text('Не удалось подключиться к серверу')
         });
     }
 
     document.getElementById("subjectselector").onchange = function changecourse() {        
-        $.get('./filelist.php', {
-                courseid: $("#courseselector :selected").val(),
-                subjectid: $("#subjectselector :selected").val()
-            }).done(function (response) {
-                $('#courses').html(response)
-            }).fail(function () {
-                $('#courses').text('Не удалось подключиться к серверу')
-            });
+        getgrouplist()
     }
 
     function deletepos(source) {
