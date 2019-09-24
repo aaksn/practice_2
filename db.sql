@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Сен 03 2019 г., 21:22
+-- Время создания: Сен 24 2019 г., 10:12
 -- Версия сервера: 10.3.13-MariaDB
 -- Версия PHP: 7.1.22
 
@@ -44,7 +44,15 @@ INSERT INTO `attendance` (`ID_ATT`, `ID_SUBJECT`, `ID_STUDENT`, `ID_DATE`, `MARK
 (2, 2, 1, 1, 1),
 (3, 2, 5, 1, 1),
 (4, 2, 1, 2, 1),
-(5, 2, 5, 2, 1);
+(5, 2, 5, 2, 1),
+(6, 2, 1, 3, 1),
+(7, 2, 5, 3, 0),
+(8, 2, 1, 4, 0),
+(9, 2, 5, 4, 1),
+(10, 2, 1, 5, 0),
+(11, 2, 5, 5, 1),
+(12, 2, 1, 6, 1),
+(13, 2, 5, 6, 0);
 
 -- --------------------------------------------------------
 
@@ -86,7 +94,11 @@ CREATE TABLE `dates` (
 
 INSERT INTO `dates` (`ID_DATE`, `DATE`) VALUES
 (1, '10.10.18'),
-(2, '23.01.19');
+(2, '23.01.19'),
+(3, '01.10'),
+(4, '12.05'),
+(5, '01.01'),
+(6, '01.01');
 
 -- --------------------------------------------------------
 
@@ -128,7 +140,7 @@ INSERT INTO `groups` (`ID_GROUP`, `GROUP_NAME`, `ID_COURSE`, `ID_SUBJECT`) VALUE
 
 CREATE TABLE `permissions` (
   `ID_PERMISSION` int(11) NOT NULL,
-  `RANK` int(11) NOT NULL,
+  `RANK` varchar(4) NOT NULL,
   `NAME_RANK` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -137,10 +149,10 @@ CREATE TABLE `permissions` (
 --
 
 INSERT INTO `permissions` (`ID_PERMISSION`, `RANK`, `NAME_RANK`) VALUES
-(1, 777, 'root'),
-(2, 111, 'user'),
-(3, 222, 'teacher'),
-(4, 666, 'moderator');
+(1, '777', 'root'),
+(2, '0001', 'user'),
+(3, '0111', 'teacher'),
+(4, '1111', 'dekan');
 
 -- --------------------------------------------------------
 
@@ -198,7 +210,7 @@ CREATE TABLE `users` (
   `ID_USER` tinyint(2) UNSIGNED NOT NULL,
   `USERNAME` varchar(15) NOT NULL,
   `PASSWORD` varchar(32) NOT NULL,
-  `RANK` int(11) NOT NULL,
+  `RANK` varchar(4) NOT NULL DEFAULT '0001',
   `HASH` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -207,13 +219,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`ID_USER`, `USERNAME`, `PASSWORD`, `RANK`, `HASH`) VALUES
-(2, 'root', 'root', 777, ''),
-(3, 'teacher', 'teacher', 222, ''),
-(4, 'moderator', 'moderator', 666, ''),
-(5, 'user', 'user', 111, ''),
-(6, 'first', '1fbf04ad51bd056831bad3b1f685aff7', 666, ''),
-(7, 'rusik', '20b29fe263143860f94565d0092645d7', 666, ''),
-(8, 'test', 'fb469d7ef430b0baf0cab6c436e70375', 666, 'b6c19c20e8cacf0011ddc8c5b9db9ab9');
+(6, 'first', '1fbf04ad51bd056831bad3b1f685aff7', '0111', ''),
+(7, 'rusik', '20b29fe263143860f94565d0092645d7', '1111', ''),
+(8, 'test', 'fb469d7ef430b0baf0cab6c436e70375', '0001', '2907c2f264b912dcdebe76a2591cff45');
 
 --
 -- Индексы сохранённых таблиц
@@ -288,13 +296,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `ID_ATT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID_ATT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT для таблицы `dates`
 --
 ALTER TABLE `dates`
-  MODIFY `ID_DATE` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_DATE` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT для таблицы `permissions`
@@ -331,6 +339,12 @@ ALTER TABLE `attendance`
   ADD CONSTRAINT `ATTENDANCE_ibfk_2` FOREIGN KEY (`ID_SUBJECT`) REFERENCES `subjects` (`ID_SUBJECT`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `ATTENDANCE_ibfk_3` FOREIGN KEY (`ID_STUDENT`) REFERENCES `students` (`ID_STUDENT`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `ATTENDANCE_ibfk_4` FOREIGN KEY (`ID_DATE`) REFERENCES `dates` (`ID_DATE`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`RANK`) REFERENCES `permissions` (`RANK`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
