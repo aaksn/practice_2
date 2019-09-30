@@ -1,9 +1,5 @@
 <?php
-$host = 'localhost';
-$database = 'db'; // имя базы данных
-$user = 'root'; // имя пользователя
-$password = ''; // пароль
-$link = mysqli_connect($host, $user, $password, $database) or die("Ошибка " . mysqli_error($link));
+include 'dbconn.php';
 
 if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["groupid"])) {
     if ($_GET["groupid"] == 'undefined' | $_GET["subjectid"] == 'undefined') {
@@ -29,6 +25,7 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
         die('Error loading file "' . pathinfo($inputFileName, PATHINFO_BASENAME) . '": ' . $e->getMessage());
     }
 
+    $link=OpenCon();
     $sheet = $objPHPExcel->getSheet(0);
     $highestRow = $sheet->getHighestRow();
     $highestColumn = $sheet->getHighestColumn();
@@ -67,3 +64,4 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
     }
 }
 
+?>

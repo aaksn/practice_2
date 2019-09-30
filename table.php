@@ -1,8 +1,6 @@
 <?php
-$host = 'localhost';
-$database = 'db'; // имя базы данных
-$user = 'root'; // имя пользователя
-$password = ''; // пароль
+include 'dbconn.php';
+$link=OpenCon();
 
 //Отображение таблицы
 if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["groupid"])) {
@@ -10,8 +8,6 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
     $groupid = $_GET["groupid"];
     $subjectid = $_GET["subjectid"];
 
-    $link = mysqli_connect($host, $user, $password, $database)
-    or die("Ошибка " . mysqli_error($link));
     $res = mysqli_query($link, "SELECT students.ID_STUDENT,students.FIO,attendance.ID_ATT, attendance.ID_DATE, dates.DATE, attendance.MARK FROM students,attendance,dates WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_DATE=dates.ID_DATE AND students.ID_COURSE=$courseid AND students.ID_GROUP=$groupid AND attendance.ID_SUBJECT=$subjectid") or die("Ошибка " . mysqli_error($link));
     $students = [];
     $dates = [];
@@ -40,7 +36,6 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
     $courseid = $_POST["courseid"];
     $groupid = $_POST["groupid"];
     $subjectid = $_POST["subjectid"];
-    $link = mysqli_connect($host, $user, $password, $database) or die("Ошибка " . mysqli_error($link));
     
     /*
     //все предметы
@@ -113,7 +108,7 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
         $mark = $_POST["data"];
         // выполняем операции с базой данных
         mysqli_query($link, "UPDATE attendance SET MARK = '$mark' WHERE ID_ATT = $id") or die("Ошибка " . mysqli_error($link));
-        
+
         echo "Type: CHANGEMARK";
     }
     if ($_POST["type"] == 'CHANGEALLMARK' && !empty($_POST["id"])) {

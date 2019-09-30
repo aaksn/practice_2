@@ -1,9 +1,6 @@
 <?php
-$host = 'localhost';
-$database = 'db'; // имя базы данных
-$user = 'root'; // имя пользователя
-$password = ''; // пароль
-$link = mysqli_connect($host, $user, $password, $database) or die("Ошибка " . mysqli_error($link));
+include 'dbconn.php';
+$link = OpenCon();
 
 
 if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["groupid"])) {
@@ -72,3 +69,5 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
     header('Content-Disposition: attachment;filename=' . $courseid . ' курс ' . $groupid . ' группа' . '.xls');
     $object_writer->save('php://output');
 }
+
+?>

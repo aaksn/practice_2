@@ -1,9 +1,7 @@
 <?php
 // Страница авторизации
-$host = 'localhost';
-$database = 'db'; // имя базы данных
-$user = 'root'; // имя пользователя
-$password = ''; // пароль
+include 'dbconn.php';
+$link=OpenCon();
 
 // Функция для генерации случайной строки
 function generateCode($length=6) {
@@ -17,7 +15,6 @@ function generateCode($length=6) {
 }
 
 // Соединямся с БД
-$link = mysqli_connect($host, $user, $password, $database) or die("Ошибка " . mysqli_error($link));
 
 if(isset($_POST['submit']))
 {

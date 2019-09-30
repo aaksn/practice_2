@@ -1,13 +1,11 @@
 <?php
 // Скрипт проверки кук
-$host = 'localhost';
-$database = 'db'; // имя базы данных
-$user = 'root'; // имя пользователя
-$password = ''; // пароль
+include 'dbconn.php';
+$link=OpenCon();
 
 if (isset($_COOKIE['id']) and isset($_COOKIE['hash'])) {
     // Соединямся с БД
-    $link = mysqli_connect($host, $user, $password, $database);
+
 
     $query = mysqli_query($link, "SELECT ID_USER,RANK, HASH, USERNAME FROM users WHERE ID_USER = " . intval($_COOKIE['id']));
     $userdata = mysqli_fetch_assoc($query);
@@ -28,4 +26,5 @@ if (isset($_COOKIE['id']) and isset($_COOKIE['hash'])) {
     }
     mysqli_close($link);
 }
+$link=OpenCon();
 ?>

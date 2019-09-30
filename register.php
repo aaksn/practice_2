@@ -1,9 +1,7 @@
     <?php 
     // Страница регистрации нового пользователя
-    $host = 'localhost';
-    $database = 'db'; // имя базы данных
-    $user = 'root'; // имя пользователя
-    $password = ''; // пароль
+    include 'dbconn.php';
+    $link=OpenCon();
 
     if(isset($_POST['submit']))
     {
@@ -21,7 +19,6 @@
         }
 
         // проверяем, не сущестует ли пользователя с таким именем
-        $link = mysqli_connect($host, $user, $password, $database) or die("Ошибка " . mysqli_error($link));
         $query = mysqli_query($link, "SELECT ID_USER FROM users WHERE USERNAME='".mysqli_real_escape_string($link, $_POST['login'])."'");
         //mysqli_close($link);
         if(mysqli_num_rows($query) > 0)
