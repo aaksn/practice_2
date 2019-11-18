@@ -66,7 +66,7 @@ if(!empty($_GET['logout']))
 if(isset($_POST['repass']))
 {    
     $lp = $_POST['login'];
-    $query = mysqli_query($link,"SELECT ID_USER, PASSWORD FROM users WHERE USERNAME=$lp");
+    $query = mysqli_query($link, "SELECT ID_USER, PASSWORD FROM users WHERE USERNAME='".mysqli_real_escape_string($link, $_POST['login'])."'");
     $data = mysqli_fetch_assoc($query);
 
     // Сравниваем пароли
@@ -74,11 +74,12 @@ if(isset($_POST['repass']))
     {
         // Генерируем случайное число и шифруем его
         $hash = md5(generateCode(10));
-        $newpasswod = md5(md5(trim($_POST["newpassword"])));
+        $newpassword = md5(md5(trim($_POST["newpassword"])));
 
-        // Записываем в БД новый хеш авторизации
-        $id = $data['ID_USER'];
-        mysqli_query($link, "UPDATE users SET HASH=$hash AND PASSWORD=$newpasswod WHERE ID_USER=$id");
+        // Записываем в БД новый хеш авторизации и пароль
+        $iduser = $data['ID_USER'];
+        
+        mysqli_query($link, "UPDATE `users` SET `HASH` = '$hash' AND `PASSWORD` = '$newpassword' WHERE `users`.`ID_USER` = $iduser");
 
         // Ставим куки
         setcookie("id", $data['ID_USER'], time()+60*60*24*30);
@@ -89,7 +90,7 @@ if(isset($_POST['repass']))
     }
     else
     {
-        print '<script>alert( "Вы ввели неправильный пароль"); window.location.replace("changepass.html");</script>';
+        print '<script>alert( "Вы ввели неправильный пароль"); window.location.replace("resetpass.html");</script>';
     }
 }
 

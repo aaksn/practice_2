@@ -17,7 +17,7 @@
 						<div class="content">
 							<h2 id="header">Войти</h2>							
 							<form method="POST" action="login.php">
-								<div class="fields" align="left">
+								<div class="fields" align="left" id="data_fields">
 									<div class="field">
 										<label for="login">Логин</label>
 										<input type="text" required name="login" id="login">
@@ -38,7 +38,7 @@
 									
 								</div>
 							</form>							
-							<a href="./resetpass.html">Забыли пароль</a> | <a href="javascript:changepass();">Смена пароля</a> | <a href="./register.html">Регистрация</a>
+							<a href="./resetpass.html">Забыли пароль</a> | <a href="javascript:changepass();">Смена пароля</a> | <a href="./resetpass.html">Регистрация</a>
 						</div>
 
 						<div class="image">
@@ -58,10 +58,12 @@
 			<script src="assets/js/base.js"></script>
 			<script type="text/javascript">
 				function changepass() {
-					$("#checkfield").empty();
+					$("#checkfield").remove();
 					$("#submit").val("Далее");
 					$("#header").text("Сменить пароль");
-					$("form").attr("action", "post.php");
+					$("#submit").attr("name", "repass");
+
+					$("#data_fields").append('<div class="field"><label for="newpassword">Новый пароль</label><input type="password" required name="newpassword" id="newpassword" value=""><div>');
 				};
 
 			</script>

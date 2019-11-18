@@ -114,7 +114,8 @@
 <script src="assets/js/main.js"></script>
 <!--<script src="assets/js/base.js"></script>-->
 <script type="text/javascript">
-    var perm = 0;
+    var perm0 = 0; //editgroup
+    var perm1 = 0; //edittable
 
     function getgrouplist() {        
         $.get('./filelist.php', {
@@ -127,7 +128,7 @@
                 $.each(obj.elements, function(key, value){
                     var input = '<li id=' + key + 'f><input type="radio" id="' + key + '" name="groupselector"><label for="' + key + '">' + value + '</label>';
                     
-                    if (perm){
+                    if (perm0){
                         var edit = '<a href="javascript:editpos(' + key + ');" class="button primary small icon fa-pencil-square-o">Изменить</a> <a href="javascript:deletepos(' + key + ');" class="button primary small icon fa-trash">Удалить</a>';
                         input += edit;
                     }
@@ -149,8 +150,9 @@
             }).done(function (response) {                
                 if (response.length > 0) {
                     var obj = $.parseJSON(response);
-                    perm = obj.permissions;
-                    if (perm){
+                    perm0 = obj.edit_group;
+                    perm1 = obj.edit_table;
+                    if (perm0){
                         $('.button.icon.fa-plus').show();
                     }
                     $('#prelogin').text('Вы вошли как ' + obj.username);
@@ -312,6 +314,7 @@
         } else {
             $('#' + source).removeClass('fa-check').addClass('fa-times');
         }*/
+        
         var t = 0; 
         if ($('#' + source).is('.fa-times')) {
             t = 1;
@@ -332,9 +335,11 @@
         }).fail(function () {
             alert('No connection')
         });
+        
     }
 
     function changename(source) {
+        
         var s2 = "'" + source + "'";
         if (!$("#" + source).is('a')) {
             var t = $("#newval" + source).val();
@@ -356,9 +361,11 @@
             $("#" + source).closest("td").html('<input type="text" name="newval" id="newval' + source + '" value="" style="height: 2rem"><a href="javascript:changename(' + s2 + ')" class="button icon fa-check">Сохранить</a>');
             $("#newval" + source).val(t);
         }
+        
     }
 
     function changedate(source) {
+        
         var s2 = "'" + source + "'";
         if (!$("#" + source).is('a')) {
             var t = $("#newval" + source).val();
@@ -380,6 +387,7 @@
             $("#" + source).closest("th").html('<input type="text" name="newval" id="newval' + source + '" value="" style="height: 2rem"><a href="javascript:changedate(' + s2 + ')" class="button icon fa-check">Сохранить</a>');
             $("#newval" + source).val(t);
         }
+        
     }
 
     function showtable() {
@@ -403,7 +411,11 @@
                 var str = '<th><a id="d' + key + '" href="javascript:changedate(\'d' + key + '\')">' + value + '</a></th>';                
                 table += str;
             });
-            table += '<th><a href="javascript:adddate();" class="icon fa-plus"></a></th></tr></thead><tbody>';
+            if (perm1) {
+                table += '<th><a href="javascript:adddate();" class="icon fa-plus"></a></th>';
+            };
+            table += '</tr></thead><tbody>';
+            
             $.each(obj.students, function(key, value){
                 var str = '<tr><td><a id="n' + value.id + '" href="javascript:changename(\'n' + value.id + '\')">'+ value.name + '</a></td>';
                     $.each(value.marks, function(k, v){
@@ -418,7 +430,8 @@
             });
             table += '</tbody><tfoot><tr><td><a href="javascript:addstudent();" class="icon fa-plus"> Добавить студента</a></td></tr></tfoot>';
             $('#tableviewer').html(table);
-            if (!perm){
+
+            if (!perm1){
                 $('[href ~= "javascript:addstudent();"]').hide();
                 $('[href ~= "javascript:adddate();"]').hide();
                 $('[href *= "javascript:change("]').removeAttr("href");
