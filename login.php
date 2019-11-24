@@ -79,7 +79,7 @@ if(isset($_POST['repass']))
         // Записываем в БД новый хеш авторизации и пароль
         $iduser = $data['ID_USER'];
         
-        mysqli_query($link, "UPDATE `users` SET `HASH` = '$hash' AND `PASSWORD` = '$newpassword' WHERE `users`.`ID_USER` = $iduser");
+        mysqli_query($link, "UPDATE `users` SET `HASH` = '$hash', `PASSWORD` = '$newpassword' WHERE `users`.`ID_USER` = $iduser");
 
         // Ставим куки
         setcookie("id", $data['ID_USER'], time()+60*60*24*30);
