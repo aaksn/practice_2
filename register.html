@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<title>Регистрация</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>		
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper" class="divided">
+
+				<section class="banner onload-image-fade-in onload-content-fade-right style2 fullscreen orient-center content-align-center image-position-center -">
+						<div class="content">
+							<h2>Регистрация</h2>
+							<div id="checkhelp">
+									Для регистрации вам необходимо получить проверочный код у администратора и ввести его ниже
+							</div>							
+							<form method="POST" action="register.php">
+								<div class="fields" align="left">
+									<div class="field">
+										<label for="login">Логин</label>
+										<input type="text" required name="login" id="login">
+									</div>									
+									<div class="field">
+										<label for="login">Проверочный код</label>
+										<input type="text" required name="checkcode" id="checkcode">
+									</div>
+                                    <div class="field">
+										<label for="password">Пароль</label>
+										<input type="password" required name="password" id="password" value="">
+                                    </div>                                    
+								</div>								
+								<div class="field third">									
+									<input class="primary button fit" type="submit" name="submit" id="submit" value="Отправить">									
+								</div>
+                            </form>	
+                        </div>
+
+						<div class="image">
+							<img src="./images/banner.jpg" alt="">
+						</div>
+				</section>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+            <script src="assets/js/util.js"></script>
+            <script src="assets/js/main.js"></script>
+			<script src="assets/js/base.js"></script>
+			
+	</body>
+</html>
