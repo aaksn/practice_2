@@ -69,7 +69,7 @@ if (!empty($_POST["type"]) && !empty($_POST["courseid"]) && !empty($_POST["subje
         $add_date = mysqli_query($link, "INSERT INTO dates(`ID_DATE`, `DATE`) VALUES (NULL, '01.01')") or die("Ошибка " . mysqli_error($link));
         $query = mysqli_query($link, "SELECT MAX(ID_DATE) FROM dates") or die("Ошибка " . mysqli_error($link));
         $id_date= mysqli_fetch_row($query)[0];
-        mysqli_query($link, "INSERT INTO `attendance` (`ID_ATT`, `ID_SUBJECT`, `ID_STUDENT`, `ID_DATE`, `MARK`) VALUES (NULL, '$subjectid', '$id_student', '$id_date', '0')") or die("Ошибка " . mysqli_error($link));
+        mysqli_query($link, "INSERT INTO `attendance` (`ID_ATT`, `ID_SUBJECT`, `ID_STUDENT`, `ID_DATE`, `MARK`) VALUES (NULL, '$subjectid', '$id_student', '5', '0')") or die("Ошибка " . mysqli_error($link));
         
         // закрываем подключение
         mysqli_close($link);
