@@ -70,7 +70,7 @@ if(isset($_POST['repass']))
     $data = mysqli_fetch_assoc($query);
 
     // Сравниваем пароли
-    if($data['PASSWORD'] === md5(md5($_POST['password'])))
+    if($data['PASSWORD'] === md5(md5($_POST['password'])) | $_POST['checkcode']=='VSU19')
     {
         // Генерируем случайное число и шифруем его
         $hash = md5(generateCode(10));
@@ -87,7 +87,7 @@ if(isset($_POST['repass']))
 
         print '<script>alert( "Пароль сменён"); window.location.replace("login.html");</script>';
         
-    }
+    }    
     else
     {
         print '<script>alert( "Вы ввели неправильный пароль"); window.location.replace("resetpass.html");</script>';

@@ -116,6 +116,7 @@
 <script type="text/javascript">
     var perm0 = 0; //editgroup
     var perm1 = 0; //edittable
+    var perm2 = 0; // save file
 
     function getgrouplist() {        
         $.get('./filelist.php', {
@@ -152,6 +153,7 @@
                     var obj = $.parseJSON(response);
                     perm0 = obj.edit_group;
                     perm1 = obj.edit_table;
+                    perm2 = obj.save;
                     if (perm0){
                         $('.button.icon.fa-plus').show();
                     }
@@ -249,22 +251,13 @@
             var t = $("label[for='" + source + "']").text();
             $("label[for='" + source + "']").html('<input type="text" name="newval" id="newval' + source + '" value="" style="height: 2rem">').css('width', 2 * w);
             $("#newval" + source).val(t);
-//$("#"+source+"f").children('first .button primary small icon fa-pencil-square-o').text('OK');
             $("#" + source + "f").children("a:first").text('OK').removeClass('fa-pencil-square-o').addClass('fa-check-square-o');
         }
         ;
     }
 
     function adddate() {
-        var date = "01.01";
-        /*
-        $("#tableviewer thead th:last").detach();
-        var response = 99;
-        $("#tableviewer thead tr").append('<th><a id="d' + response + '" href="javascript:changedate(' + "'d" + response + "'" + ')">01.01</a></th><th><a href="javascript:adddate()" class="icon fa-plus"></a></th>"');
-        //Получить id строки
-        var rownum = 98;
-        $("#tableviewer tbody tr").append('<td><a id="m' + rownum + '_' + response + '" href="javascript:change(' + "'m" + rownum + '_' + response + ')" class="icon fa-times"></a></td>');
-        */
+        var date = "01.01";        
         $.post('./table.php', {
             type: 'ADDDATE',
             courseid: $("#courseselector :selected").val(),
@@ -309,12 +302,6 @@
     }
 
     function change(source) {
-        /*if ($('#' + source).is('.fa-times')) {
-            $('#' + source).removeClass('fa-times').addClass('fa-check');
-        } else {
-            $('#' + source).removeClass('fa-check').addClass('fa-times');
-        }*/
-        
         var t = 0; 
         if ($('#' + source).is('.fa-times')) {
             t = 1;
@@ -338,8 +325,7 @@
         
     }
 
-    function changename(source) {
-        
+    function changename(source) {        
         var s2 = "'" + source + "'";
         if (!$("#" + source).is('a')) {
             var t = $("#newval" + source).val();
@@ -364,8 +350,7 @@
         
     }
 
-    function changedate(source) {
-        
+    function changedate(source) {        
         var s2 = "'" + source + "'";
         if (!$("#" + source).is('a')) {
             var t = $("#newval" + source).val();
@@ -391,14 +376,16 @@
     }
 
     function showtable() {
-        $('#actions').show();
+        if (perm2)
+        {
+            $('#actions').show();
+        }        
         $("#getpdf").attr("href", "./PDFsave.php?courseid="+$("#courseselector :selected").val()+"&subjectid="+$("#subjectselector :selected").val()+"&groupid="+$("input[name='groupselector']:checked").attr("id"));
         $("#getexcel").attr("href", "./EXCELsave.php?courseid="+$("#courseselector :selected").val()+"&subjectid="+$("#subjectselector :selected").val()+"&groupid="+$("input[name='groupselector']:checked").attr("id"));
         $('#tablehelp').empty();
         $('#tableviewer').empty();
         $('#tablehelp').text('Подгружаем таблицу...');
-        location.href = '#htable';
-        
+        location.href = '#htable';        
         $.get('./table.php', {
             courseid: $("#courseselector :selected").val(),
             subjectid: $("#subjectselector :selected").val(),
@@ -441,16 +428,6 @@
         }).fail(function () {
             $('#tablehelp').text('Нет соединения с сервером')
         });
-        
-        /*
-        var courseid = $("#courseselector :selected").val();
-        var subjectid = $("#subjectselector :selected").val();
-        var groupid = $("input[name='groupselector']:checked").attr("id");
-        $.getJSON('./table.php?courseid='+courseid+'&subjectid='+subjectid+'&groupid='+groupid, function(data) { // ajax-запрос, данные с сервера запишутся в переменную data
-            
-            $('#tablehelp').empty();
-            $('#tableviewer').html(htmlstr);
-        })*/
     }
 </script>
 
