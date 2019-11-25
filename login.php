@@ -43,12 +43,13 @@ if(isset($_POST['submit']))
         setcookie("hash", $hash, $time,null,null,null,true); // httponly !!!
 
         // Переадресовываем браузер на страницу проверки нашего скрипта
-        header("Location: base.html"); exit();
+        //header("Location: base.html"); exit();
+        print '<script>window.location.replace("base.html");</script>';
     }
     else
     {
         print '<script>alert( "Вы ввели неправильный логин/пароль"); window.location.replace("login.html");</script>';
-        header("Location: login.html");
+        //header("Location: login.html");
     }
 }
 
