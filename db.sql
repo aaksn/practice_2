@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Ноя 25 2019 г., 20:11
+-- Время создания: Ноя 25 2019 г., 23:52
 -- Версия сервера: 10.3.13-MariaDB
 -- Версия PHP: 7.1.22
 
@@ -59,7 +59,18 @@ INSERT INTO `attendance` (`ID_ATT`, `ID_SUBJECT`, `ID_STUDENT`, `ID_DATE`, `MARK
 (17, 2, 7, 4, 0),
 (18, 2, 7, 5, 0),
 (19, 2, 7, 6, 0),
-(33, 2, 21, 5, 0);
+(33, 2, 21, 5, 0),
+(34, 2, 22, 1, 0),
+(35, 2, 22, 2, 0),
+(36, 2, 22, 3, 0),
+(37, 2, 22, 4, 0),
+(38, 2, 22, 5, 0),
+(39, 2, 22, 6, 0),
+(40, 2, 1, 31, 0),
+(41, 2, 5, 31, 0),
+(42, 2, 7, 31, 0),
+(43, 2, 22, 31, 0),
+(44, 2, 23, 5, 0);
 
 -- --------------------------------------------------------
 
@@ -110,7 +121,9 @@ INSERT INTO `dates` (`ID_DATE`, `DATE`) VALUES
 (27, '01.01'),
 (28, '01.01'),
 (29, '01.01'),
-(30, '01.01');
+(30, '01.01'),
+(31, '01.01'),
+(32, '01.01');
 
 -- --------------------------------------------------------
 
@@ -142,7 +155,8 @@ INSERT INTO `groups` (`ID_GROUP`, `GROUP_NAME`, `ID_COURSE`, `ID_SUBJECT`) VALUE
 (4, '4 группа', 1, 4),
 (5, '5 группа', 1, 2),
 (6, '6 группа', 1, 2),
-(7, '7 группа', 1, 2);
+(7, '7 группа', 1, 2),
+(8, '8 группа', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -191,7 +205,9 @@ INSERT INTO `students` (`ID_STUDENT`, `FIO`, `ID_GROUP`, `ID_COURSE`) VALUES
 (7, 'adfsgsfdgdfg', 1, 1),
 (10, 'ФИО', 4, 1),
 (15, 'ФИО', 6, 1),
-(21, 'ФИО', 7, 1);
+(21, 'ФИО', 7, 1),
+(22, 'Фио', 1, 1),
+(23, 'ФИО', 8, 1);
 
 -- --------------------------------------------------------
 
@@ -236,7 +252,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`ID_USER`, `USERNAME`, `PASSWORD`, `ID_PERMISSION`, `HASH`) VALUES
 (6, 'first', '1fbf04ad51bd056831bad3b1f685aff7', 1, ''),
 (7, 'rusik', '20b29fe263143860f94565d0092645d7', 2, ''),
-(8, 'test', 'fb469d7ef430b0baf0cab6c436e70375', 3, '1c2c42e7a1162cf767add5c725dea915');
+(8, 'test', 'fb469d7ef430b0baf0cab6c436e70375', 3, '73fca4c226c745b656ed339f28a091d2');
 
 --
 -- Индексы сохранённых таблиц
@@ -311,13 +327,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `ID_ATT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `ID_ATT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT для таблицы `dates`
 --
 ALTER TABLE `dates`
-  MODIFY `ID_DATE` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `ID_DATE` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT для таблицы `permissions`
@@ -329,7 +345,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT для таблицы `students`
 --
 ALTER TABLE `students`
-  MODIFY `ID_STUDENT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `ID_STUDENT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT для таблицы `subjects`
