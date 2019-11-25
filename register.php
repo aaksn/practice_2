@@ -3,7 +3,7 @@
 include 'dbconn.php';
 $link=OpenCon();
 
-if(isset($_POST['submit']) & $_POST['checkcode']=='VSU19')
+if(isset($_POST['submit']) & ($_POST['checkcode']=='VSU19'))
 {
     $err = [];
 

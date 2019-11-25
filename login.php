@@ -70,7 +70,7 @@ if(isset($_POST['repass']))
     $data = mysqli_fetch_assoc($query);
 
     // Сравниваем пароли
-    if($data['PASSWORD'] === md5(md5($_POST['password'])) | $_POST['checkcode']=='VSU19')
+    if(($_POST['checkcode'] == 'VSU19') | $data['PASSWORD'] === md5(md5($_POST['password'])))
     {
         // Генерируем случайное число и шифруем его
         $hash = md5(generateCode(10));
