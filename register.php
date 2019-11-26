@@ -36,7 +36,7 @@ if(isset($_POST['submit']) & ($_POST['checkcode']=='VSU19'))
         $password = md5(md5(trim($_POST['password'])));
         // md5 - 32 символа
                 
-        mysqli_query($link,"INSERT INTO `users` (`ID_USER`, `USERNAME`, `PASSWORD`, `RANK`) VALUES (NULL, '$login', '$password', '666')")
+        mysqli_query($link,"INSERT INTO `users`(`ID_USER`, `USERNAME`, `PASSWORD`, `ID_PERMISSION`, `HASH`) VALUES (NULL, '$login', '$password',1,'' )")
         or die("Ошибка " . mysqli_error($link));
         
         //header("Location: login.php"); exit();
