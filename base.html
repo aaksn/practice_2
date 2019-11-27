@@ -114,6 +114,38 @@
 <script src="assets/js/main.js"></script>
 <!--<script src="assets/js/base.js"></script>-->
 <script type="text/javascript">
+    $('input[type=file]').change(function(){        
+        var files = this.files;
+        var data = new FormData();
+        $.each( files, function( key, value ){
+            data.append( key, value );
+        });
+        data.append( 'courseid', $("#courseselector :selected").val() );
+        data.append( 'subjectid', $("#subjectselector :selected").val() );
+        data.append( 'groupid', $("input[name='groupselector']:checked").attr("id"), );
+    
+        // Отправляем запрос
+    
+        $.ajax({
+            url: './EXCELopen.php',
+            type: 'POST',
+            data: data,
+            cache: false,
+            dataType: 'json',
+            processData: false, // Не обрабатываем файлы (Don't process the files)
+            contentType: false, 
+            success: function( respond, textStatus, jqXHR ){
+                    
+                console.log('Файлы загружены на сервер');
+            },
+            error: function( jqXHR, textStatus, errorThrown ){
+                showtable();
+            }
+        });
+        $('input[file]').val('');
+        
+    });
+
     var perm0 = 0; //editgroup
     var perm1 = 0; //edittable
     var perm2 = 0; // save file

@@ -1,22 +1,25 @@
 <?php
 include 'dbconn.php';
 
-if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["groupid"])) {
-    if ($_GET["groupid"] == 'undefined' | $_GET["subjectid"] == 'undefined') {
+if (!empty($_POST["courseid"]) && !empty($_POST["subjectid"]) && !empty($_POST["groupid"]) && $_FILES && $_FILES['0']['error'] == UPLOAD_ERR_OK) {
+    if ($_POST["groupid"] == 'undefined' | $_POST["subjectid"] == 'undefined') {
         header("Location: base.html");
         exit();
     }
 
-    $courseid = $_GET["courseid"];
-    $groupid = $_GET["groupid"];
-    $subjectid = $_GET["subjectid"];
+    $courseid = $_POST["courseid"];
+    $groupid = $_POST["groupid"];
+    $subjectid = $_POST["subjectid"];
 //$courseid = 1;
 //$groupid = 4;
 //$subjectid = 2;
 
     require_once 'phpexcel/PHPExcel.php';
-    $inputFileName = $_GET["inputFile"];;
+    //$inputFileName = $_POST["inputFile"];;
 //$inputFileName='1.xlsx';
+    $name = $_FILES['0']['tmp_name'];
+   // move_uploaded_file($_FILES['0']['tmp_name'], $name);
+    $inputFileName = $name;
     try {
         $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
         $objReader = PHPExcel_IOFactory::createReader($inputFileType);
@@ -26,6 +29,11 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
     }
 
     $link=OpenCon();
+    while( $res = mysqli_fetch_row(mysqli_query($link, "SELECT students.ID_STUDENT FROM students,attendance,dates WHERE students.ID_STUDENT=attendance.ID_STUDENT AND attendance.ID_DATE=dates.ID_DATE AND students.ID_COURSE=$courseid AND students.ID_GROUP=$groupid AND attendance.ID_SUBJECT=$subjectid"))){
+         mysqli_query($link, "DELETE FROM students WHERE students.ID_STUDENT=$res[0]"); 
+         mysqli_query($link, "DELETE FROM attendance WHERE attendance.ID_STUDENT=$res[0] AND attendance.ID_SUBJECT=$subjectid");
+    }
+    
     $sheet = $objPHPExcel->getSheet(0);
     $highestRow = $sheet->getHighestRow();
     $highestColumn = $sheet->getHighestColumn();
@@ -50,7 +58,7 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
                 } else {
                     $val = 0;
                 }
-                $date = mysqli_query($link, "SELECT ID_DATE FROM dates WHERE DATE=$Date") or die("Ошибка11 " . mysqli_error($link));
+                $date = mysqli_query($link, "SELECT ID_DATE FROM dates WHERE DATE='$Date'") or die("Ошибка11 " . mysqli_error($link));
                 $dates = mysqli_fetch_array($date);
                 echo $dates[0] . " ";
                 $student = mysqli_query($link, "SELECT ID_STUDENT FROM students WHERE FIO='$FIO' AND ID_GROUP=$groupid AND ID_COURSE=$courseid ") or die("Ошибка22 " . mysqli_error($link));
@@ -62,6 +70,9 @@ if (!empty($_GET["courseid"]) && !empty($_GET["subjectid"]) && !empty($_GET["gro
         }
 
     }
+}
+else {
+    echo $_FILES; 
 }
 
 ?>
